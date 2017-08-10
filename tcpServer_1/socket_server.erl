@@ -27,11 +27,17 @@ handle_cast({accepted, _Pid}, State=#server_state{}) ->
 	{noreply, accept(State)}.
 
 accept_loop({Server, LSocket, {M, F}}) ->
-	{ok, Socket} = gen_tcp:accept(LSocket),
+	{ok, Socket} = gen_tcp:accept(LSocket), %%Vl.blocking operation
 	% Let the server spawn a new process and replace this loop
 	% with the echo loop, to avoid blocking 
-	gen_server:cast(Server, {accepted, self()}),
-	M:F(Socket).
+	case M:F(Socket,start) of
+		server_down ->
+			io:format("server_down~n"),
+			init:stop();
+		session_down ->
+			io:format("session_down~n"),
+			gen_server:cast(Server, {accepted, self()})
+	end.
 	
 % To be more robust we should be using spawn_link and trapping exits
 accept(State = #server_state{lsocket=LSocket, loop = Loop}) ->
