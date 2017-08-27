@@ -1,5 +1,4 @@
 -module(socket_server).
--author('Jesse E.I. Farmer <jesse@20bits.com>').
 -behavior(gen_server).
 %% http://20bits.com/article/erlang-a-generalized-tcp-server
 -export([init/1, code_change/3, handle_call/3, handle_cast/2, handle_info/2, terminate/2]).
