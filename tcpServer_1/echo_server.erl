@@ -2,6 +2,7 @@
 -export([start/0, loop/2]).
 
 % echo_server specific code
+% http://erlang.org/doc/programming_examples/bit_syntax.html
 start() ->
 	socket_server:start(?MODULE, 7000, {?MODULE, loop}).
 loop(Socket,start) ->
@@ -13,9 +14,9 @@ loop(Socket,_) ->
 			server_down;
 		{ok, <<"session_down_cmd\n">>} ->
 			session_down;
-		{ok, <<"response",Seq:32,"delay",Delay:8>>} ->
+		{ok, <<"response",Seq:4/signed-integer-unit:8,"delay",Delay:1/signed-integer-unit:8>>} ->
 			timer:sleep(Delay*10*1000),
-			gen_tcp:send(Socket,<<"keepalive",(Seq+1):32,"delay",Delay:8>>),
+			gen_tcp:send(Socket,<<"keepalive",(Seq+1):4/signed-integer-unit:8,"delay",Delay:1/signed-integer-unit:8>>),
             loop(Socket,run);
         {ok, Data} ->
 			timer:sleep(3000),
