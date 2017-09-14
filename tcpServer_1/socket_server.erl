@@ -5,11 +5,12 @@
 -export([accept_loop/1]).
 -export([start/3]).
 
--define(TCP_OPTIONS, [binary, {packet, 0}, {active, false}, {reuseaddr, true}]).
+-define(TCP_OPTIONS, [binary, inet, {packet, 0}, {active, false}, {reuseaddr, true}]).
 
 -record(server_state, {port, loop, ip=any, lsocket=null}).
 
 start(Name, Port, Loop) ->
+	io:format("socket_server rel.8~n"),
 	State = #server_state{port = Port, loop = Loop},
 	gen_server:start_link({local, Name}, ?MODULE, State, []).
 
@@ -23,6 +24,7 @@ init(State = #server_state{port=Port}) ->
 	end.
 
 handle_cast({accepted, _Pid}, State=#server_state{}) ->
+	io:format("socket_server:handle_cast/2, State = ~w~n", [State]),
 	{noreply, accept(State)}.
 
 accept_loop({Server, LSocket, {M, F}}) ->
@@ -34,7 +36,7 @@ accept_loop({Server, LSocket, {M, F}}) ->
 			io:format("server_down~n"),
 			init:stop();
 		session_down ->
-			io:format("session_down~n"),
+			error_logger:info_msg("session_down~n"),
 			gen_server:cast(Server, {accepted, self()})
 	end.
 	
