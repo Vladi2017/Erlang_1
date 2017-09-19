@@ -5,7 +5,7 @@
 % echo_server: delay = keepalive_interval
 % http://erlang.org/doc/programming_examples/bit_syntax.html
 start(Port) ->
-	io:format("echo_server rel.8~n"),
+	io:format("echo_server rel.9, using gen_tcp:recv/2~n"),
 	{ok,Pid} = socket_server:start(?MODULE, Port, {?MODULE, loop}),
 	error_logger:info_msg("Started TCP server. ~w~n", [Pid]).
 loop(Socket,start) ->
@@ -13,12 +13,13 @@ loop(Socket,start) ->
 	error_logger:info_msg("TCP client connected. ~n"),
 	loop(Socket,run);
 loop(Socket,_) ->
-    case gen_tcp:recv(Socket, 0, 7000) of % recv(Socket, Length, Timeout) -> {ok, Packet} | {error, Reason}
+    case gen_tcp:recv(Socket, 0) of % recv(Socket, Length, Timeout) -> {ok, Packet} | {error, Reason}
 		{ok, <<"server_down_cmd\n">>} ->
 			server_down;
 		{ok, <<"session_down_cmd\n">>} ->
 			session_down;
 		{ok, <<"response",Seq:4/signed-integer-unit:8,"delay",Delay:1/signed-integer-unit:8>>} ->
+			io:format("~w,", [Seq]),
 			timer:sleep(Delay*10*1000),
 			Result1 = gen_tcp:send(Socket,<<"keepalive",(Seq+1):4/signed-integer-unit:8,"delay",Delay:1/signed-integer-unit:8>>),
 			case Result1 of

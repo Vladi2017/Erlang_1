@@ -27,7 +27,7 @@ handle_cast({accepted, _Pid}, State=#server_state{}) ->
 	io:format("socket_server:handle_cast/2, State = ~w~n", [State]),
 	{noreply, accept(State)}.
 
-accept_loop({Server, LSocket, {M, F}}) ->
+accept_loop({Server, LSocket, {M, F}}) -> % M,F = Module, Function
 	{ok, Socket} = gen_tcp:accept(LSocket), %%Vl.blocking operation
 	% Let the server spawn a new process and replace this loop
 	% with the echo loop, to avoid blocking 
