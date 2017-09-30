@@ -10,7 +10,7 @@
 -record(server_state, {port, loop, ip=any, lsocket=null}).
 
 start(Name, Port, Loop) ->
-	io:format("socket_server rel.8~n"),
+	io:format("socket_server rel.9~n"),
 	State = #server_state{port = Port, loop = Loop},
 	gen_server:start_link({local, Name}, ?MODULE, State, []).
 
@@ -28,6 +28,7 @@ handle_cast({accepted, _Pid}, State=#server_state{}) ->
 	{noreply, accept(State)}.
 
 accept_loop({Server, LSocket, {M, F}}) -> % M,F = Module, Function
+	io:format("reach server accept state~n"),
 	{ok, Socket} = gen_tcp:accept(LSocket), %%Vl.blocking operation
 	% Let the server spawn a new process and replace this loop
 	% with the echo loop, to avoid blocking 
@@ -37,6 +38,7 @@ accept_loop({Server, LSocket, {M, F}}) -> % M,F = Module, Function
 			init:stop();
 		session_down ->
 			error_logger:info_msg("session_down~n"),
+			gen_tcp:close(Socket),
 			gen_server:cast(Server, {accepted, self()})
 	end.
 	
