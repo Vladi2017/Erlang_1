@@ -10,7 +10,7 @@
 -record(server_state, {port, loop, ip=any, lsocket=null}).
 
 start(Name, Port, Loop) ->
-	io:format("socket_server rel.9~n"),
+	io:format("socket_server rel.10~n"),
 	State = #server_state{port = Port, loop = Loop},
 	gen_server:start_link({local, Name}, ?MODULE, State, []).
 
@@ -36,8 +36,8 @@ accept_loop({Server, LSocket, {M, F}}) -> % M,F = Module, Function
 		server_down ->
 			io:format("server_down~n"),
 			init:stop();
-		session_down ->
-			error_logger:info_msg("session_down~n"),
+		Other ->
+			error_logger:info_msg("Vl3. session closed with ~w~n", [Other]),
 			gen_tcp:close(Socket),
 			gen_server:cast(Server, {accepted, self()})
 	end.

@@ -1,11 +1,12 @@
 -module(echo_server).
 -export([start/1, loop/2]).
 -record(vars, {bin1, iter1}).
+-define(timeout, 13000).
 
 % echo_server: delay = keepalive_interval
 % http://erlang.org/doc/programming_examples/bit_syntax.html
 start(Port) ->
-	io:format("echo_server rel.10, using gen_tcp:recv/2~n"),
+	io:format("echo_server rel.11, using gen_tcp:recv/3 & non-blocking graph~n"),
 	{ok,Pid} = socket_server:start(?MODULE, Port, {?MODULE, loop}),
 	error_logger:info_msg("Started TCP server. ~w~n", [Pid]).
 loop(Socket,start) ->
@@ -13,7 +14,7 @@ loop(Socket,start) ->
 	error_logger:info_msg("TCP client connected. ~n"),
 	loop(Socket,run);
 loop(Socket,_) ->
-    case gen_tcp:recv(Socket, 0) of % recv(Socket, Length, Timeout) -> {ok, Packet} | {error, Reason}
+    case gen_tcp:recv(Socket, 0, ?timeout) of % recv(Socket, Length, Timeout) -> {ok, Packet} | {error, Reason}
 		{ok, <<"server_down_cmd\n">>} ->
 			server_down;
 		{ok, <<"session_down_cmd\n">>} ->
@@ -32,9 +33,10 @@ loop(Socket,_) ->
 			timer:sleep(3000),
             gen_tcp:send(Socket, Data),
             loop(Socket,run);
-        {error, closed} ->
-			error_logger:info_msg("Vl2. received {error, closed}~n"),
-            ok;
+        % {error, closed} ->
+			% error_logger:info_msg("Vl2. received {error, closed}~n"),
+            % ok;
 		Other ->
-			error_logger:info_msg("Vl3. received ~w~n", [Other])
+			% error_logger:info_msg("Vl3. received ~w~n", [Other])
+			Other
     end.
