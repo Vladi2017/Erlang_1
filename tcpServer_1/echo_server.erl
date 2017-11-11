@@ -1,12 +1,15 @@
 -module(echo_server).
--export([start/1, loop/2]).
+-export([start/1, loop/2, delayedKA/3]).
 -record(vars, {bin1, iter1}).
 -define(timeout, 600000).
+
+%Vl.http://erlang.org/doc/reference_manual/typespec.html#id78862; http://erlang.org/doc/reference_manual/typespec.html#id80050; http://erlang.org/doc/reference_manual/data_types.html
+%%-spec delayedKA([_,...]) -> ok.
 
 % echo_server: delay = keepalive_interval
 % http://erlang.org/doc/programming_examples/bit_syntax.html
 start(Port) ->
-	io:format("echo_server rel.12, using gen_tcp:recv/3 & non-blocking graph~n"),
+	io:format("echo_server rel.13, using gen_tcp:recv/3 & non-blocking graph~n"),
 	{ok,Pid} = socket_server:start(?MODULE, Port, {?MODULE, loop}),
 	error_logger:info_msg("Started TCP server. ~w~n", [Pid]).
 loop(Socket,start) ->
@@ -37,7 +40,7 @@ loop(Socket,TRef) ->
 			{ok, cancel} = timer:cancel(TRef),
 			Other
     end.
-delayedKA([Socket,Seq,Delay]) ->
+delayedKA(Socket,Seq,Delay) ->
 	Result1 = gen_tcp:send(Socket,<<"keepalive",(Seq+1):4/signed-integer-unit:8,"delay",Delay:1/signed-integer-unit:8>>),
 	case Result1 of
 		ok -> ok;
