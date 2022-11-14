@@ -1,0 +1,72 @@
+pi@raspberrypi:~/projects1/tcpServer_1
+$ sudo tcpdump -Ani eth0 tcp port 7000
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+01:32:35.807428 IP 213.233.85.130.24835 > 10.1.53.27.7000: Flags [S], seq 78347211, win 13140, options [mss 1400,nop,nop,sackOK,nop,wscale 6], length 0
+E..4f.@.6.sF..U.
+.5.a..X..{.......3T.......x........
+01:32:35.807738 IP 10.1.53.27.7000 > 213.233.85.130.24835: Flags [S.], seq 967782894, ack 78347212, win 29200, options [mss 1460,nop,nop,sackOK,nop,wscale 7], length 0
+E..4..@.@..<
+.5...U..Xa.9.1...{...r.j...............
+01:32:36.328591 IP 213.233.85.130.24835 > 10.1.53.27.7000: Flags [.], ack 1, win 206, length 0
+E..(f.@.6.sQ..U.
+.5.a..X..{.9.1.P.............
+01:32:36.330767 IP 10.1.53.27.7000 > 213.233.85.130.24835: Flags [P.], seq 1:20, ack 1, win 229, length 19
+E..;b.@.@.mI
+.5...U..Xa.9.1...{.P...j...keepalive....delay.
+01:32:36.564189 IP 213.233.85.130.24835 > 10.1.53.27.7000: Flags [.], ack 20, win 206, length 0
+E..(f.@.6.sP..U.
+.5.a..X..{.9.2.P.............
+01:32:36.624938 IP 213.233.85.130.24835 > 10.1.53.27.7000: Flags [P.], seq 1:19, ack 20, win 206, length 18
+E..:f.@.6.s=..U.
+.5.a..X..{.9.2.P....l..response....delay.
+01:32:36.625177 IP 10.1.53.27.7000 > 213.233.85.130.24835: Flags [.], ack 19, win 229, length 0
+E..(b.@.@.m[
+.5...U..Xa.9.2...{.P...j...
+
+
+01:32:56.642976 IP 10.1.53.27.7000 > 213.233.85.130.24835: Flags [P.], seq 20:39, ack 19, win 229, length 19
+E..;b.@.@.mG
+.5...U..Xa.9.2...{.P...j...keepalive....delay.
+01:32:57.618467 IP 10.1.53.27.7000 > 213.233.85.130.24835: Flags [P.], seq 20:39, ack 19, win 229, length 19
+E..;b.@.@.mF
+.5...U..Xa.9.2...{.P...j...keepalive....delay.
+01:32:58.364959 IP 213.233.85.130.24835 > 10.1.53.27.7000: Flags [P.], seq 19:37, ack 39, win 206, length 18
+E..:f.@.6.s<..U.
+.5.a..X..{.9.2.P....F..response....delay.
+01:32:58.365230 IP 10.1.53.27.7000 > 213.233.85.130.24835: Flags [.], ack 37, win 229, length 0
+E..(b.@.@.mX
+.5...U..Xa.9.2...{.P...j...
+01:32:58.400176 IP 213.233.85.130.24835 > 10.1.53.27.7000: Flags [.], ack 39, win 206, options [nop,nop,sack 1 {20:39}], length 0
+E..4f.@.6.sA..U.
+.5.a..X..{.9.2......6.....
+9.2.9.2.
+
+
+01:33:18.386815 IP 10.1.53.27.7000 > 213.233.85.130.24835: Flags [P.], seq 39:58, ack 37, win 229, length 19
+E..;b.@.@.mD
+.5...U..Xa.9.2...{.P...j...keepalive....delay.
+01:33:19.358453 IP 10.1.53.27.7000 > 213.233.85.130.24835: Flags [P.], seq 39:58, ack 37, win 229, length 19
+E..;b.@.@.mC
+.5...U..Xa.9.2...{.P...j...keepalive....delay.
+01:33:19.914630 IP 213.233.85.130.24835 > 10.1.53.27.7000: Flags [.], ack 58, win 206, length 0
+E..(f.@.6.sL..U.
+.5.a..X..{.9.2(P.............
+01:33:19.940126 IP 213.233.85.130.24835 > 10.1.53.27.7000: Flags [.], ack 58, win 206, options [nop,nop,sack 1 {39:58}], length 0
+E..4f.@.6.s?..U.
+.5.a..X..{.9.2(...........
+9.2.9.2(
+01:33:19.969132 IP 213.233.85.130.24835 > 10.1.53.27.7000: Flags [P.], seq 37:55, ack 58, win 206, length 18
+E..:f.@.6.s8..U.
+.5.a..X..{.9.2(P.... ..response....delay.
+01:33:19.969375 IP 10.1.53.27.7000 > 213.233.85.130.24835: Flags [.], ack 55, win 229, length 0
+E..(b.@.@.mU
+.5...U..Xa.9.2(..|.P...j...
+
+
+^C
+18 packets captured
+18 packets received by filter
+0 packets dropped by kernel
+pi@raspberrypi:~/projects1/tcpServer_1
+$

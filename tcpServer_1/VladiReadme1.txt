@@ -1,0 +1,4 @@
+3:30 PM Saturday, September 30, 2017:
+tcpServer_1 works with test1pn/TCPclien1Activity ver.179
+1. It seems the phone at battery flat, just before get off, the Android OS send a TCP RST packet.. I came to this conclusion because I found the tcpServer_1 with the message "Vl2. received {error, closed}". An other 2nd assumption could be that the (mobile) network somehow send that TCP RST packet.. (this is less probable though..).. We can redo the test by removing the phone's battery while tcpServer_1 is in gen_tcp:recv(Socket, 0) state (also see D:\Profiles\Administrator\My Documents\docs\diagrams\TCP1.vsd)
+2. As I expected when loose (cellular) radio signal and get android.telephony.ServiceState.STATE_OUT_OF_SERVICE, tcpServer_1 remain in gen_tcp:recv/2 forever.. As about TCPclien1Activity we get "\nVladi13.., we got an Exception in RecvThread: "

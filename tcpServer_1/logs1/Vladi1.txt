@@ -1,0 +1,3902 @@
+tags: Vl.,
+11:35 PM Tuesday, September 12, 2017, io:format("socket_server rel.7~n"):
+$ erl
+Erlang/OTP 17 [erts-6.2] [source] [smp:4:4] [async-threads:10] [kernel-poll:false]
+Eshell V6.2  (abort with ^G)
+1> echo_server:start(7000).
+echo_server rel.7
+socket_server rel.7
+{ok,<0.35.0>}
+session_down
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+2>
+
+1:00 PM Wednesday, September 13, 2017:
+keepalive276delay12
+Vladi13.., we got an Exception in RecvThread:java.net.SocketException:recvfrom failed: ETIMEDOUT (Connection timed out)
+Vladi13.., leave RecvThread.
+
+6:49 PM Thursday, September 14, 2017: //Vl.timestamp_raspberrypi_server - timestamp_phone_client = about 10 seconds.
+//Vl.,test tags: error,Exception,test1pn,
+pi@raspberrypi:~/projects1/tcpServer_1
+$ erl
+Erlang/OTP 17 [erts-6.2] [source] [smp:4:4] [async-threads:10] [kernel-poll:false]
+Eshell V6.2  (abort with ^G)
+1> ls().
+echo_server.beam       echo_server.erl        logs1
+socket_server.beam     socket_server.erl
+ok
+2> echo_server:start(7000).
+echo_server rel.8
+socket_server rel.8
+ok
+3>
+=INFO REPORT==== 14-Sep-2017::18:32:55 ===Started TCP server. <0.36.0>
+=INFO REPORT==== 14-Sep-2017::18:34:59 ===TCP client connected.
+=INFO REPORT==== 14-Sep-2017::18:37:09 ===Vl3. received {error,timeout}
+3>
+
+//Vl.next, phone's app test1pn ver.122:
+Connect to: 89.120.135.155.7000 ....done
+2017-09-14 18:34:49
+keepalive1delay2
+keepalive2delay6
+2017-09-14 18:36:06 //Vl.timestamp exception because we disabled phone GPRS data connection
+Vladi13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out)
+libcore.io.IoBridge.maybeThrowAfterRecvfrom(IoBridge.java:542)
+libcore.io.IoBridge.recvfrom(IoBridge.java:518)
+java.nio.SocketChannelImpl.readImpl(SocketChannelImpl.java:305)
+java.nio.SocketChannelImpl.read(SocketChannelImpl.java:267)
+com.example.test1pn.TCPclient1Activity$RecvThread.run(TCPclient1Activity.java:187) //while ((nBytes = client.read(buf)) > 5) {
+Vladi14.., leave RecvThread.
+
+pi@raspberrypi:~/projects1/tcpServer_1 //Vl.sockets after above exception.. Observe that ESTABLISHED on 7000 was closed..
+$ netstat -aptun
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:4369            0.0.0.0:*               LISTEN      1244/epmd
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:7000            0.0.0.0:*               LISTEN      28179/beam.smp
+tcp        0      0 10.1.53.27:22           42.7.26.15:62950        ESTABLISHED -
+tcp        0     52 10.1.53.27:22           81.181.207.253:12704    ESTABLISHED -
+tcp6       0      0 :::22                   :::*                    LISTEN      -
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           -
+udp        0      0 10.1.53.27:123          0.0.0.0:*                           -
+....
+pi@raspberrypi:~/projects1/tcpServer_1
+$
+****************** end tag test1
+
+****************** tag test2, 8:45 AM Friday, September 15, 2017//Vl.timestamp_raspberrypi_server - timestamp_phone_client = about 9-10 seconds.
+//Vl. Very important: correlated with AndroidStudioProjects\test1pn\Vladi1\VlAndroidTcpdumpLog1.pcap (an overnight tcpdump capture made on my Samsung phone GT-S7562 ICS Powered by PMP Engine). In this VlAndroidTcpdumpLog1.pcap file we can see the famous 9 minutes GCM/FCM interval (use tcp.port == 5228 filter in Wireshark).
+//Vl. Interesting frames in VlAndroidTcpdumpLog1.pcap: typical 204-208; 289-293; how should always to be 559-561 (3 segs.), 690_691_694 (3); variation on typical 729-734 (6); TCP erroneous closed 2535-2551;
+11>
+11> echo_server:start(7000).
+echo_server rel.8	//Vl. used gen_tcp:recv/3 gen_tcp:recv(Socket, 0, 7000)
+socket_server rel.8
+=INFO REPORT==== 14-Sep-2017::23:09:23 ===
+Started TCP server. <0.51.0>
+ok
+12>
+=INFO REPORT==== 14-Sep-2017::23:10:32 === //Vl. client time = 23:10:23
+TCP client connected.
+12>
+=INFO REPORT==== 15-Sep-2017::07:16:03 === //Vl. client time = 07:15:53 see VlAndroidTcpdumpLog1 frames 2535-2551;
+Vl3. received {error,timeout}
+12>
+//Vl.next, phone's app test1pn ver.122:
+Connect to: 89.120.135.155.7000 ....done
+2017-09-14 23:10:23
+keepalive1delay2
+keepalive2delay12
+keepalive3delay12
+keepalive236delay12
+keepalive237delay12
+keepalive238delay12
+2017-09-15 07:16:34
+Vladi13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ECONNRESET (Connection reset by peer)
+libcore.io.IoBridge.maybeThrowAfterRecvfrom(IoBridge.java:542)
+libcore.io.IoBridge.recvfrom(IoBridge.java:518)
+java.nio.SocketChannelImpl.readImpl(SocketChannelImpl.java:305)
+java.nio.SocketChannelImpl.read(SocketChannelImpl.java:267)
+com.example.test1pn.TCPclient1Activity$RecvThread.run(TCPclient1Activity.java:187)
+Vladi14.., leave RecvThread.
+
+****************** end tag test2
+
+****************** tag test3, 11:33 PM Sunday, September 17, 2017:
+//Vl. secion's tags: VlLinux2, VlAndroid2
+//V. very important remark: files VlLinux2.pcap and VlAndroid2.pcap are correlated whith this test3 (see below)
+
+Preparing:
+//Vl.1st sync clocks on raspberrypi and the phone..
+pi@raspberrypi:~/projects1/tcpServer_1/logs1
+$ sudo tcpdump -ni eth0 tcp port 7000 -w ./VlLinux2.pcap
+C-a blank //Vl.switch screen window
+pi@raspberrypi:~/projects1/tcpServer_1
+$ erl
+Erlang/OTP 17 [erts-6.2] [source] [smp:4:4] [async-threads:10] [kernel-poll:false]
+Eshell V6.2  (abort with ^G)
+1>  echo_server:start(7000).
+
+adb -d shell
+cd /mnt/sdcard/Vladi1
+rm ./VlAndroidTcpdumpLog2.pcap
+root@android:/system/xbin # busybox ifconfig rmnet0
+root@android:/mnt/sdcard/Vladi1 # ps |grep -i tcp
+root@android:/mnt/sdcard/Vladi1 # tcpdump -ni rmnet0 -w ./VlAndroid2.pcap&	//Vl.running in background
+ls -l
+root@android:/mnt/sdcard/Vladi1 # ps |grep -i tcp
+root      17042 1     6952   3676  c0121d10 0014552c S tcpdump
+//Vl. start test1pn app
+start tcpClien1Activity
+set keepalive_interval = 120 seconds
+select connect
+D:\Profiles\Administrator\AndroidStudioProjects\test1pn\Vladi1>adb -d pull -a /mnt/sdcard/Vladi1 //Vl.all files in phone's Vladi1 directory are copied
+
+pi@raspberrypi:~/projects1/tcpServer_1/logs1
+$ sudo tcpdump -ni eth0 tcp port 7000 -w ./VlLinux2.pcap
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+^C1807 packets captured
+1807 packets received by filter
+0 packets dropped by kernel
+1 packet dropped by interface
+pi@raspberrypi:~/projects1/tcpServer_1/logs1
+$
+-rw-r--r-- 1 root root 149976 Sep 18 11:22 VlLinux2.pcap
+
+$ erl
+Erlang/OTP 17 [erts-6.2] [source] [smp:4:4] [async-threads:10] [kernel-poll:false]
+Eshell V6.2  (abort with ^G)
+1>
+1> echo_server:start(7000).
+echo_server rel.9, using gen_tcp:recv/2
+socket_server rel.8
+ok
+=INFO REPORT==== 17-Sep-2017::23:55:36 ===
+Started TCP server. <0.35.0>
+2>
+=INFO REPORT==== 18-Sep-2017::00:02:47 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,2>
+=INFO REPORT==== 18-Sep-2017::11:09:20 === //Vl.although we got "Vladi13" exception at 11:01:40 here we got {error, closed} about 00:07:40 later = Sorin Pisa call duration + ringing duration
+Vl2. received {error, closed}
+2> q().
+ok
+3> pi@raspberrypi:~/projects1/tcpServer_1
+$
+
+Connect to: 89.120.135.155.7000 ....done
+2017-09-18 00:02:46
+keepalive1delay2
+keepalive2delay12
+keepalive3delay12
+keepalive4delay12
+keepalive297delay12
+keepalive317delay12
+keepalive318delay12
+keepalive319delay12
+keepalive320delay12
+2017-09-18 11:01:40	//Vl.I was speaking on this phone with Sorin Pisa (he called me at 11:01 call duration (from CALL_STATE_OFFHOOK) 00:07:16)
+Vladi13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out)
+libcore.io.IoBridge.maybeThrowAfterRecvfrom(IoBridge.java:542)
+libcore.io.IoBridge.recvfrom(IoBridge.java:518)
+java.nio.SocketChannelImpl.readImpl(SocketChannelImpl.java:305)
+java.nio.SocketChannelImpl.read(SocketChannelImpl.java:267)
+com.example.test1pn.TCPclient1Activity$RecvThread.run(TCPclient1Activity.java:188)
+Vladi14.., leave RecvThread.
+****************** end tag test3
+
+****************** tag test4, 4:29 PM Saturday, September 30, 2017
+//Vl. secion's tags: Vl.,log1_1,log1_2,log2,log3,log4,log4_1,,,,,,
+log1_1:com.example.test1pn.TCPclient1Activity ver.178 //Vl.without connection to Erlang tcpServer_1 but with data activated/deactivated.. It is unclear if we have (consecutive) WiFi as well or GPRS only.. (test were made last night and I don't remember very sure..)
+//Vl. tcpC=TCPclient, tcpS=TCPserver
+V.from onStart()
+V.from onResume()
+21:28:39.745: Vladi18, CALL_STATE_IDLE
+21:28:39.754: Vl18, DATA_DISCONNECTED
+21:28:39.756: Vl21, DataConnectivity_DOWN
+21:28:48.692: Vladi18, DATA_CONNECTED
+21:28:49.604: Vl21, DataConnectivity_UP
+
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+
+V.from onPause()
+V.from OnStop()
+21:30:55.362: Vladi18, CALL_STATE_RINGING
+21:30:55.894: Vladi18, DATA_SUSPENDED
+21:30:56.523: Vl21, DataConnectivity_DOWN
+21:31:03.262: Vladi18, CALL_STATE_IDLE
+21:31:03.379: Vladi18, DATA_CONNECTED
+21:31:04.751: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+
+V.from onPause()
+V.from OnStop()
+21:35:26.875: Vladi18, CALL_STATE_RINGING
+21:35:26.922: Vladi18, DATA_SUSPENDED
+21:35:27.749: Vl21, DataConnectivity_DOWN
+21:35:50.846: Vladi18, CALL_STATE_IDLE
+21:35:51.048: Vladi18, DATA_CONNECTED
+21:35:51.724: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+
+V.from onPause()
+V.from OnStop()
+22:13:34.407: Vl18, DATA_DISCONNECTED	//Vl.here the phone was introduced in the shielded box (simulating "out of radio coverage")
+22:13:35.061: Vl21, DataConnectivity_DOWN
+23:12:39.699: Vladi18, DATA_CONNECTED	//Vl.got the phone out from the shielded box (after one hour)
+23:12:40.508: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+
+23:34:55.081: Vladi18, CALL_STATE_RINGING
+23:34:55.092: Vladi18, DATA_SUSPENDED
+V.from onPause()
+23:34:56.181: Vl21, DataConnectivity_DOWN
+23:35:00.103: Vladi18, CALL_STATE_IDLE
+23:35:00.205: Vladi18, DATA_CONNECTED
+23:35:00.655: Vl21, DataConnectivity_UP
+V.from onResume()
+
+log1_2: //Vl.with (GPRS) connection to Erlang tcpServer_1
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+
+Connect to: 89.120.135.155.7000 ....done
+2017-09-30 00:00:41
+ka1d2; ack
+ka2d2; ack
+ka3d2; ack
+ka4d2; ack
+ka5d2; ack
+ka6d2; ack
+ka15d2; ack
+ka16d2; ack
+V.from onPause()
+V.from OnStop()
+ka17d2; ack
+ka18d2; ack
+ka19d2; ack
+ka83d2; ack
+ka84d2; ack
+V.from onStart()
+V.from onResume()
+ka85d2; ack
+ka86d2; ack
+ka87d2; ack
+ka88d2; ack
+ka89d2; ack
+ka90d2; ack
+Vladi19. sent: java.nio.ReadWriteHeapByteBuffer, status: capacity=17 position=17 limit=17	//Vl.sent "session_down_cmd\n" from TCPclient1Activity = 17 chars
+ka91d2; ack
+Incomplete read 1, nBytes=-1; buf: pos=0, limit=32, remaining=32
+2017-09-30 00:34:36.590	//Vl.tag tcpC2 see also tcpS2 (overall tag tcpS2C2)
+Vladi13.., we got an Exception in RecvThread: java.lang.Exception: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream
+com.example.test1pn.TCPclient1Activity$RecvThread.run(TCPclient1Activity.java:305)
+SocketChannel isConnected() returns true
+Vladi14.., socketChannel = java.nio.SocketChannelImpl@41058788, leave RecvThread.
+
+Connect to: 89.120.135.155.7000 ....
+Vladi6. got in client.connect(isa): java.nio.channels.AlreadyConnectedException	//Vl.Unchecked exception thrown when an attempt is made to connect a SocketChannel that is already connected. //Vl.see isConnected() above
+Vladi7. receive thread not launched
+
+
+log2:correlated with log4: com.example.test1pn.TCPclient1Activity ver.179 //Vl.with (GPRS) connection to Erlang tcpServer_1. //Vl. additional  we have phone's (cellular) android.telephony.ServiceState retuned by onServiceStateChanged(ss) callback (see phone's ServiceState at tag Vl22).
+V.from onStart()
+V.from onResume()
+00:50:07.318: Vl22, STATE_IN_SERVICE
+00:50:07.321: Vladi18, CALL_STATE_IDLE
+00:50:07.322: Vladi18, DATA_CONNECTED
+00:50:07.323: Vl21, DataConnectivity_UP
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+Connect to: 89.120.135.155.7000 ....done
+2017-09-30 00:51:48
+ka1d2; ack
+V.from onPause()
+V.from OnStop()
+ka2d4; ack
+ka3d4; ack
+ka4d4; ack
+ka5d4; ack
+ka6d4; ack
+00:55:52.885: Vl22, STATE_OUT_OF_SERVICE	//Vl.tag tcpC1, here is the result of introducing the phone in the shielded box (simulating "out of radio coverage"). Screen is off.., suppose to be in (deep) sleep mode.. Also see tag tcpS1
+00:55:52.889: Vl18, DATA_DISCONNECTED	//Vl.have we here a time window to send a valid TCP RST flag?? I guess not..
+2017-09-30 00:55:53.563
+Vladi13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out)
+libcore.io.IoBridge.maybeThrowAfterRecvfrom(IoBridge.java:542)
+libcore.io.IoBridge.recvfrom(IoBridge.java:518)
+java.nio.SocketChannelImpl.readImpl(SocketChannelImpl.java:305)
+java.nio.SocketChannelImpl.read(SocketChannelImpl.java:267)
+com.example.test1pn.TCPclient1Activity$RecvThread.run(TCPclient1Activity.java:275)
+SocketChannel isConnected() returns true	//Vl.still connected after ETIMEDOUT SocketException
+Vladi14.., socketChannel = java.nio.SocketChannelImpl@420de048, leave RecvThread.
+00:55:55.955: Vl21, DataConnectivity_DOWN	//Vl.as you see there are 2 seconds AFTER we got ETIMEDOUT SocketException
+00:56:24.925: Vl22, STATE_EMERGENCY_ONLY
+00:57:04.978: Vl22, STATE_OUT_OF_SERVICE
+00:57:36.979: Vl22, STATE_IN_SERVICE	//Vl.from here the phone bouncing between STATE_IN_SERVICE and STATE_OUT_OF_SERVICE (radio coverage boundary)
+00:57:37.039: Vladi18, DATA_CONNECTED
+00:57:37.720: Vl21, DataConnectivity_UP
+00:57:43.519: Vl22, STATE_OUT_OF_SERVICE
+00:57:43.521: Vl18, DATA_DISCONNECTED
+00:57:46.923: Vl21, DataConnectivity_DOWN
+00:57:52.908: Vl22, STATE_IN_SERVICE
+00:57:52.941: Vladi18, DATA_CONNECTED
+00:57:54.545: Vl21, DataConnectivity_UP
+00:57:59.423: Vl22, STATE_OUT_OF_SERVICE
+00:57:59.479: Vl18, DATA_DISCONNECTED
+00:58:00.082: Vl21, DataConnectivity_DOWN
+00:58:13.915: Vl22, STATE_IN_SERVICE
+00:58:13.941: Vladi18, DATA_CONNECTED
+00:58:29.842: Vl21, DataConnectivity_UP
+00:59:16.180: Vl22, STATE_OUT_OF_SERVICE
+00:59:16.370: Vl18, DATA_DISCONNECTED
+00:59:19.882: Vl21, DataConnectivity_DOWN
+00:59:26.902: Vl22, STATE_IN_SERVICE	//Vl.here we took the phone out of the shielded box
+00:59:26.924: Vladi18, DATA_CONNECTED
+00:59:37.082: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+
+//Vl.log3:
+pi@raspberrypi:~/projects1/tcpServer_1
+$ erl
+Erlang/OTP 17 [erts-6.2] [source] [smp:4:4] [async-threads:10] [kernel-poll:false]
+Eshell V6.2  (abort with ^G)
+1> echo_server:start(7000).
+echo_server rel.10, using gen_tcp:recv/2
+socket_server rel.9
+reach server accept state
+ok
+=INFO REPORT==== 29-Sep-2017::23:59:21 ===
+Started TCP server. <0.35.0>
+2>
+=INFO REPORT==== 30-Sep-2017::00:00:45 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,2>
+=INFO REPORT==== 30-Sep-2017::00:34:38 ===	//Vl.tcpS2, also see tcpC2 (overall tag tcpS2C2)
+session_down	//Vl.gen_tcp:close(Socket),
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+reach server accept state
+2>
+//Vl. log4: correlated with log2. Erlang tcpServer_1 view
+=INFO REPORT==== 30-Sep-2017::00:51:51 ===
+TCP client connected.
+1,2,3,4,5,6,2>	//Vl.tag tcpS1, the server remain in forever gen_tcp:recv/2..(typical half-open connection), also see tcpC1, tag1log4_1
+2> exit(pid(0,35,0),kill).
+** exception exit: killed
+3> regs().
+
+//Vl. log4_1:
+pi@raspberrypi:~/projects1/tcpServer_1/logs1
+$ date
+Sat 30 Sep 01:08:02 EEST 2017
+pi@raspberrypi:~/projects1/tcpServer_1/logs1
+$ netstat -aptun
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:4369            0.0.0.0:*               LISTEN      1244/epmd
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:7000            0.0.0.0:*               LISTEN      29605/beam.smp
+tcp        0     19 10.1.53.27:7000         213.233.85.65:15995     ESTABLISHED 29605/beam.smp //Vl.tag1log4_1 at 01:08:02 still seen as ESTABLISHED 12minutes after tcpC1
+tcp        0     52 10.1.53.27:22           81.181.207.253:40448    ESTABLISHED -
+tcp6       0      0 :::22                   :::*                    LISTEN      -
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           -
+udp        0      0 10.1.53.27:123          0.0.0.0:*                           -
+****************** end tag test4,
+
+****************** tag test5, 8:58 PM Sunday, October 01, 2017 //Vl. secion's tags: Vl.,log1,log2,,,,,,,,,,
+ephemeral1
+People
+Vladimir Manolescu <mvmanol@yahoo.com>  Today at 8:53 PM
+To	
+Vladi
+Message body
+log1:com.example.test1pn.TCPclient1Activity ver.181: mentaining sc and isa objects even after sc.close().
+V.from onStart()
+V.from onResume()
+20:16:16.107: Vl22, STATE_IN_SERVICE
+20:16:16.119: Vladi18, CALL_STATE_IDLE
+20:16:16.122: Vl18, DATA_DISCONNECTED
+20:16:16.124: Vl21, DataConnectivity_DOWN
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+Connect to: 89.120.135.155.7000 ....Vl25.., InetSocketAddress isa = /89.120.135.155:7000
+Vladi4. got sc.connect(isa) IOException, failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable) //Vl.here I forgot to activate Data connection on the phone
+Vladi5. receive thread not launched
+20:17:08.868: Vladi18, DATA_CONNECTED
+20:17:09.781: Vl21, DataConnectivity_UP
+Connect to: 89.120.135.155.7000 ....Vl25.., InetSocketAddress isa = /89.120.135.155:7000
+Vladi4. got sc.connect(isa) IOException, null	//Vl.here we selected Connect 2nd time; null is returned by e.getMessage() the detail message string of this Throwable instance (which may be null).
+Vladi5. receive thread not launched
+Connect to: 89.120.135.155.7000 ....Vl25.., InetSocketAddress isa = /89.120.135.155:7000
+Vladi4. got sc.connect(isa) IOException, null //Vl.with e.toString instead of null we get: java.nio.channels.ClosedChannelException //Vl.so we're trying sc.connect with SocketChannel sc closed..
+Vladi5. receive thread not launched
+
+log2: tags: AsynchronousCloseException
+V.from onStart()
+V.from onResume()
+20:24:42.695: Vl22, STATE_IN_SERVICE
+20:24:42.696: Vladi18, CALL_STATE_IDLE
+20:24:42.697: Vladi18, DATA_CONNECTED
+20:24:42.698: Vl21, DataConnectivity_UP
+Connect to: 89.120.135.155.7000 ....Vl25.., InetSocketAddress isa = /89.120.135.155:7000
+done
+2017-10-01 20:24:47
+ka1d2; ack
+ka2d2; ack
+ka3d2; ack
+ka4d2; ack
+ka5d2; ack
+ka6d2; ack
+ka7d2; ack
+ka8d2; ack
+20:27:40.606: Vladi18, CALL_STATE_RINGING
+2017-10-01 20:27:40.604
+20:27:41.041: Vladi18, DATA_SUSPENDED
+//Vl.https://docs.oracle.com/javase/7/docs/api/java/nio/channels/AsynchronousCloseException.html: java.nio.channels.AsynchronousCloseException: Checked exception received by a thread when another thread closes the channel or the part of the channel upon which it is blocked in an I/O operation.
+Vladi13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException
+java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:116)
+java.nio.SocketChannelImpl.readImpl(SocketChannelImpl.java:311)
+java.nio.SocketChannelImpl.read(SocketChannelImpl.java:267)
+com.example.test1pn.TCPclient1Activity$RecvThread.run(TCPclient1Activity.java:416)
+SocketChannel isConnected() returns false
+Vladi14.., socketChannel = java.nio.SocketChannelImpl@41fd9740, leave RecvThread.
+20:27:41.864: Vl21, DataConnectivity_DOWN
+V.from onPause()
+20:27:49.917: Vladi18, CALL_STATE_IDLE
+20:27:50.010: Vladi18, DATA_CONNECTED
+20:27:50.794: Vl21, DataConnectivity_UP
+V.from onResume()
+Connect to: 89.120.135.155.7000 ....Vl25.., InetSocketAddress isa = /89.120.135.155:7000
+
+Vladi4. got sc.connect(isa) IOException, null
+Vladi5. receive thread not launched
+
+****************** end tag test5,
+
+****************** tag test6, 8:58 PM Sunday, October 01, 2017 //Vl. secion's tags: Vl.,log1,,,,,,,,,,,
+log1:com.example.test1pn.TCPclient1Activity ver.182: mentaining isa object even after sc.close(), but doing; if (sc == null || !sc.isOpen()) sc = SocketChannel.open(); in tcpConnect().
+pi@raspberrypi:~/projects1/tcpServer_1/logs1
+$ sudo tcpdump -nAi eth0 tcp port 7000
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+23:48:11.300878 IP 10.1.53.27.7000 > 213.233.85.36.10215: Flags [P.], seq 2973681569:2973681588, ack 2137212411, win 229, length 19
+E..;.I@.@..I
+.5...U$.X'..>...cE.P...jW..keepalive....delay.
+23:48:12.638482 IP 10.1.53.27.7000 > 213.233.85.36.10215: Flags [P.], seq 0:19, ack 1, win 229, length 19
+E..;.J@.@..H
+.5...U$.X'..>...cE.P...jW..keepalive....delay.
+23:48:14.818483 IP 10.1.53.27.7000 > 213.233.85.36.10215: Flags [P.], seq 0:19, ack 1, win 229, length 19
+E..;.K@.@..G
+.5...U$.X'..>...cE.P...jW..keepalive....delay.
+23:48:19.188470 IP 10.1.53.27.7000 > 213.233.85.36.10215: Flags [P.], seq 0:19, ack 1, win 229, length 19
+E..;.L@.@..F
+.5...U$.X'..>...cE.P...jW..keepalive....delay.
+23:48:24.312679 IP 10.1.53.27.7000 > 213.233.85.36.10215: Flags [F.], seq 19, ack 1, win 229, length 0
+E..(.M@.@..X
+.5...U$.X'..>...cE.P...jD..
+23:48:27.938485 IP 10.1.53.27.7000 > 213.233.85.36.10215: Flags [FP.], seq 0:19, ack 1, win 229, length 19
+E..;.N@.@..D
+.5...U$.X'..>...cE.P...jW..keepalive....delay.
+23:48:45.418499 IP 10.1.53.27.7000 > 213.233.85.36.10215: Flags [FP.], seq 0:19, ack 1, win 229, length 19
+E..;.O@.@..C
+.5...U$.X'..>...cE.P...jW..keepalive....delay.
+23:48:45.464553 IP 213.233.85.36.10215 > 10.1.53.27.7000: Flags [F.], seq 1, ack 0, win 206, length 0
+E..(*.@.6.....U$
+.5.'..X.cE..>..P....]........
+23:48:45.464819 IP 10.1.53.27.7000 > 213.233.85.36.10215: Flags [.], ack 2, win 229, length 0
+E..(.P@.@..U
+.5...U$.X'..>...cE.P...jD..
+23:48:45.561031 IP 213.233.85.36.10215 > 10.1.53.27.7000: Flags [R], seq 2137212411, win 0, length 0	//Vl. RST flag
+E..(..@.6.....U$
+.5.'..X.cE.....P...=.........
+23:49:20.378481 IP 10.1.53.27.7000 > 213.233.85.36.10215: Flags [FP.], seq 0:19, ack 2, win 229, length 19
+E..;.Q@.@..A
+.5...U$.X'..>...cE.P...jW..keepalive....delay.
+23:49:42.715204 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [S], seq 308666891, win 13140, options [mss 1400,nop,nop,sackOK,nop,wscale 6], length 0
+E..4..@.6.=...U$
+.5.g..X.e........3TZ|.....x........
+23:49:42.715511 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [S.], seq 623153227, ack 308666892, win 29200, options [mss 1460,nop,nop,sackOK,nop,wscale 7], length 0
+E..4..@.@...
+.5...U$.Xg.%$.K.e....r.jP..............
+23:49:43.058853 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [.], ack 1, win 206, length 0
+E..(..@.6.=...U$
+.5.g..X.e..%$.LP.............
+23:49:43.060954 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [P.], seq 1:20, ack 1, win 229, length 19
+E..;..@.@...
+.5...U$.Xg.%$.L.e..P...jW..keepalive....delay.
+23:49:43.319482 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [.], ack 20, win 206, length 0
+E..(..@.6.=...U$
+.5.g..X.e..%$._P.............
+23:49:43.371039 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [P.], seq 1:19, ack 20, win 206, length 18
+E..:..@.6.=...U$
+.5.g..X.e..%$._P....f..response....delay.
+23:49:43.371286 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [.], ack 19, win 229, length 0
+E..(..@.@...
+.5...U$.Xg.%$._.e..P...jD..
+^@
+23:52:43.457442 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [P.], seq 20:39, ack 19, win 229, length 19
+E..;..@.@...
+.5...U$.Xg.%$._.e..P...jW..keepalive....delay.
+23:52:44.158458 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [P.], seq 20:39, ack 19, win 229, length 19
+E..;..@.@...
+.5...U$.Xg.%$._.e..P...jW..keepalive....delay.
+23:52:45.188464 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [P.], seq 20:39, ack 19, win 229, length 19
+E..;..@.@...
+.5...U$.Xg.%$._.e..P...jW..keepalive....delay.
+23:52:46.373183 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [P.], seq 19:37, ack 39, win 206, length 18
+E..:..@.6.=...U$
+.5.g..X.e..%$.rP....@..response....delay.
+23:52:46.373465 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [.], ack 37, win 229, length 0
+E..(..@.@...
+.5...U$.Xg.%$.r.e.0P...jD..
+23:52:46.423160 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [.], ack 39, win 206, options [nop,nop,sack 1 {20:39}], length 0
+E..4..@.6.=...U$
+.5.g..X.e.0%$.r....v......
+%$._%$.r
+23:52:46.529894 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [.], ack 39, win 206, options [nop,nop,sack 1 {20:39}], length 0
+E..4..@.6.=...U$
+.5.g..X.e.0%$.r....v......
+%$._%$.r
+23:55:46.475966 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [P.], seq 39:58, ack 37, win 229, length 19
+E..;..@.@...
+.5...U$.Xg.%$.r.e.0P...jW..keepalive....delay.
+23:55:47.178459 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [P.], seq 39:58, ack 37, win 229, length 19
+E..;..@.@...
+.5...U$.Xg.%$.r.e.0P...jW..keepalive....delay.
+23:55:47.429271 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [.], ack 58, win 206, length 0
+E..(..@.6.=...U$
+.5.g..X.e.0%$..P.............
+23:55:47.441861 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [P.], seq 37:55, ack 58, win 206, length 18
+E..:..@.6.=...U$
+.5.g..X.e.0%$..P.......response....delay.
+23:55:47.442107 IP 10.1.53.27.7000 > 213.233.85.36.26507: Flags [.], ack 55, win 229, length 0
+E..(..@.@...
+.5...U$.Xg.%$...e.BP...jD..
+23:55:47.457345 IP 213.233.85.36.26507 > 10.1.53.27.7000: Flags [.], ack 58, win 206, options [nop,nop,sack 1 {39:58}], length 0
+E..4..@.6.=...U$
+.5.g..X.e.B%$......vP.....
+%$.r%$..
+^C
+31 packets captured
+31 packets received by filter
+0 packets dropped by kernel
+pi@raspberrypi:~/projects1/tcpServer_1/logs1
+****************** end tag test6
+
+****************** tag test7, 4:38 PM Monday, October 02, 2017 //Vl. secion's tags: Vl.,log1,CALL_STATE_RINGING,done,AsynchronousCloseException,SocketChannelImpl,CALL_STATE_OFFHOOK,,,,,,
+log1:com.example.test1pn.TCPclient1Activity ver.182: mentaining isa object even after sc.close(), but doing; "if (sc == null || !sc.isOpen()) sc = SocketChannel.open();" in tcpConnect().
+ephemeral1
+People
+Vladimir Manolescu <mvmanol@yahoo.com>  Today at 1:45 PM
+To	
+Vladi
+Message body
+V.from onStart()
+V.from onResume()
+22:43:06.571: Vl22, STATE_IN_SERVICE
+22:43:06.573: Vladi18, CALL_STATE_IDLE
+22:43:06.579: Vladi18, DATA_CONNECTED
+22:43:06.580: Vl21, DataConnectivity_UP
+Connect to: 89.120.135.155.7000 ....done
+2017-10-01 22:43:12
+ka1d2; ack
+ka2d2; ack
+ka3d2; ack
+//Vl.https://docs.oracle.com/javase/7/docs/api/java/nio/channels/AsynchronousCloseException.html: java.nio.channels.AsynchronousCloseException: Checked exception received by a thread when another thread closes the channel or the part of the channel upon which it is blocked in an I/O operation.
+22:44:01.518: Vladi18, CALL_STATE_RINGING
+2017-10-01 22:44:01.521
+
+Vladi13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException
+SocketChannel isConnected() returns false
+Vl14.., InetSocketAddress isa = /89.120.135.155:7000
+Vl14.., socketChannel sc = java.nio.SocketChannelImpl@41f65dc8, leave RecvThread.
+22:44:01.804: Vladi18, DATA_SUSPENDED
+22:44:02.889: Vl21, DataConnectivity_DOWN
+V.from onPause()
+V.from OnStop()
+22:44:15.427: Vladi18, CALL_STATE_IDLE
+22:44:15.593: Vladi18, DATA_CONNECTED
+22:44:16.426: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+Connect to: 89.120.135.155.7000 ....done
+2017-10-01 22:45:17
+ka1d2; ack
+ka2d2; ack
+ka3d2; ack
+ka4d2; ack
+ka5d2; ack
+ka6d2; ack
+V.from onPause()
+V.from OnStop()
+ka7d2; ack
+ka8d2; ack
+ka9d2; ack
+ka10d2; ack
+ka11d2; ack
+22:49:02.910: Vladi18, CALL_STATE_RINGING
+22:49:03.017: Vladi18, DATA_SUSPENDED
+2017-10-01 22:49:03.011
+
+Vladi13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException
+SocketChannel isConnected() returns false
+Vl14.., InetSocketAddress isa = /89.120.135.155:7000
+Vl14.., socketChannel sc = java.nio.SocketChannelImpl@41fbe378, leave RecvThread.
+22:49:05.866: Vl21, DataConnectivity_DOWN
+22:49:11.279: Vladi18, CALL_STATE_IDLE
+22:49:12.158: Vladi18, DATA_CONNECTED
+22:49:12.466: Vl21, DataConnectivity_UP
+Connect to: 89.120.135.155.7000 ....done
+2017-10-01 22:50:13
+ka1d2; ack
+ka2d2; ack
+ka3d2; ack
+ka4d2; ack
+V.from onStart()
+V.from onResume()
+ka5d2; ack
+ka6d2; ack
+ka7d2; ack
+ka14d2; ack
+ka15d2; ack
+ka16d2; ack
+V.from onPause()
+V.from OnStop()
+ka17d2; ack
+ka18d2; ack
+ka19d2; ack
+ka20d2; ack
+ka21d2; ack
+ka22d2; ack
+ka23d2; ack
+ka24d2; ack
+ka25d2; ack
+V.from onStart()
+V.from onResume()
+ka26d2; ack
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+ka27d2; ack
+V.from onPause()
+V.from OnStop()
+ka28d18; ack
+23:03:32.028: Vladi18, CALL_STATE_RINGING
+2017-10-01 23:03:32.041
+
+Vladi13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException
+SocketChannel isConnected() returns false
+Vl14.., InetSocketAddress isa = /89.120.135.155:7000
+Vl14.., socketChannel sc = java.nio.SocketChannelImpl@42009470, leave RecvThread. //Vl.each time we make an other sc.open() 
+23:03:32.426: Vladi18, DATA_SUSPENDED
+V.from onStart()
+V.from onResume()
+23:03:33.122: Vl21, DataConnectivity_DOWN
+V.from onPause()
+V.from OnStop()
+23:04:11.635: Vladi18, CALL_STATE_IDLE
+23:04:12.348: Vladi18, DATA_CONNECTED
+23:04:12.728: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+Connect to: 89.120.135.155.7000 ....done
+2017-10-01 23:05:13
+ka1d2; ack
+ka2d18; ack
+ka3d18; ack
+ka4d18; ack
+ka5d18; ack
+V.from onStart()
+V.from onResume()
+ka6d18; ack
+ka7d18; ack
+ka8d18; ack
+V.from onPause()
+V.from OnStop()
+ka9d18; ack
+ka10d18; ack
+ka11d18; ack
+ka12d18; ack
+ka13d18; ack
+ka14d18; ack
+23:48:03.804: Vladi18, CALL_STATE_RINGING
+2017-10-01 23:48:03.812
+
+Vladi13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException
+SocketChannel isConnected() returns false
+Vl14.., InetSocketAddress isa = /89.120.135.155:7000
+Vl14.., socketChannel sc = java.nio.SocketChannelImpl@41dabcb0, leave RecvThread.
+23:48:04.176: Vladi18, DATA_SUSPENDED
+V.from onStart()
+V.from onResume()
+23:48:05.023: Vl21, DataConnectivity_DOWN
+V.from onPause()
+V.from OnStop()
+23:48:38.999: Vladi18, CALL_STATE_IDLE
+23:48:39.002: Vladi18, DATA_CONNECTED
+23:48:40.022: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+Connect to: 89.120.135.155.7000 ....done
+2017-10-01 23:49:40
+ka1d2; ack
+ka2d18; ack
+ka3d18; ack
+ka4d18; ack
+ka5d18; ack
+ka6d18; ack
+ka7d18; ack
+ka8d18; ack
+V.from onStart()
+V.from onResume()
+ka9d18; ack
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka10d18; ack
+ka11d18; ack
+ka12d18; ack
+ka13d18; ack
+ka14d18; ack
+00:31:48.017: Vl22, STATE_IN_SERVICE
+00:31:49.069: Vladi18, DATA_CONNECTED
+ka15d18; ack
+00:33:33.818: Vl22, STATE_IN_SERVICE
+00:33:33.840: Vladi18, DATA_CONNECTED
+00:33:47.903: Vl22, STATE_IN_SERVICE
+00:33:47.905: Vladi18, DATA_CONNECTED
+00:34:33.876: Vl22, STATE_IN_SERVICE
+00:34:33.934: Vladi18, DATA_CONNECTED
+ka16d18; ack
+ka17d18; ack
+ka18d18; ack
+ka19d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka49d18; ack
+ka62d18; ack
+ka63d18; ack
+ka160d18; ack
+ka161d18; ack
+ka162d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka163d18; ack
+Incomplete read 1, nBytes=-1; buf: pos=0, limit=32, remaining=32
+2017-10-02 08:03:28.277
+
+Vladi13.., we got an Exception in RecvThread: java.lang.Exception: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream
+SocketChannel isConnected() returns true
+Connect to: 89.120.135.155.7000 ....Vl14.., InetSocketAddress isa = /89.120.135.155:7000
+Vl14.., socketChannel sc = java.nio.SocketChannelImpl@41cd90a8, leave RecvThread.
+done
+2017-10-02 08:03:28
+ka1d2; ack
+ka2d18; ack
+ka3d18; ack
+ka4d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka5d18; ack
+ka6d18; ack
+ka7d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka8d18; ack
+ka9d18; ack
+ka10d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka11d18; ack
+ka12d18; ack
+ka13d18; ack
+ka14d18; ack
+ka15d18; ack
+ka16d18; ack
+ka17d18; ack
+ka18d18; ack
+ka19d18; ack
+V.from onStart()
+V.from onResume()
+ka20d18; ack
+V.from onPause()
+V.from OnStop()
+ka21d18; ack
+ka22d18; ack
+ka23d18; ack
+ka24d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka25d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka26d18; ack
+ka42d18; ack
+ka43d18; ack
+ka44d18; ack
+ka45d18; ack
+ka46d18; ack
+ka47d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka48d18; ack
+ka49d18; ack
+ka50d18; ack
+ka51d18; ack
+ka52d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka53d18; ack
+ka54d18; ack
+ka55d18; ack
+ka56d18; ack
+ka57d18; ack
+ka101d18; ack
+ka102d18; ack
+ka103d18; ack
+13:14:52.274: Vladi18, CALL_STATE_RINGING
+2017-10-02 13:14:52.276
+
+Vladi13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException
+SocketChannel isConnected() returns false
+13:14:52.342: Vladi18, DATA_SUSPENDED
+Vl14.., InetSocketAddress isa = /89.120.135.155:7000
+Vl14.., socketChannel sc = java.nio.SocketChannelImpl@40f3d5b8, leave RecvThread.
+13:14:53.516: Vl21, DataConnectivity_DOWN
+13:15:37.948: Vladi18, CALL_STATE_IDLE
+13:15:37.951: Vladi18, DATA_CONNECTED
+13:15:39.008: Vl21, DataConnectivity_UP
+13:16:12.367: Vladi18, CALL_STATE_RINGING
+13:16:12.488: Vladi18, DATA_SUSPENDED
+13:16:13.217: Vl21, DataConnectivity_DOWN
+13:16:58.059: Vladi18, CALL_STATE_IDLE
+13:16:58.345: Vladi18, DATA_CONNECTED
+13:16:59.135: Vl21, DataConnectivity_UP
+Connect to: 89.120.135.155.7000 ....done
+2017-10-02 13:18:00
+ka1d2; ack
+ka2d18; ack
+ka3d18; ack
+ka4d18; ack
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka5d18; ack
+13:31:06.436: Vladi18, CALL_STATE_OFFHOOK	//Vl.made a phone call to Liliesti1 (they were to medical periodic control)
+13:31:06.476: Vladi18, DATA_SUSPENDED
+2017-10-02 13:31:07.000
+
+Vladi13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out)
+Connect to: 89.120.135.155.7000 ....SocketChannel isConnected() returns true
+13:31:07.861: Vl21, DataConnectivity_DOWN
+Connect to: 89.120.135.155.7000 ....Vl14.., InetSocketAddress isa = /89.120.135.155:7000
+Vl14.., socketChannel sc = java.nio.SocketChannelImpl@41f38048, leave RecvThread.
+
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+13:31:30.122: Vladi18, CALL_STATE_IDLE
+13:31:30.593: Vladi18, DATA_CONNECTED
+13:31:31.145: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+****************** end tag test7, 4:38 PM Monday, October 02, 2017 //Vl. secion's tags: Vl.,log1,CALL_STATE_RINGING,done,AsynchronousCloseException,SocketChannelImpl,CALL_STATE_OFFHOOK,,,,,,
+
+****************** end tag test8, 4:38 PM Monday, October 02, 2017 //Vl. secion's tags: Vl.,log1,CALL_STATE_RINGING,done,AsynchronousCloseException,SocketChannelImpl,CALL_STATE_OFFHOOK,bug1,,,,,
+log1:
+V.from onStart()
+V.from onResume()
+23:18:43.519: Vl22, STATE_IN_SERVICE
+23:18:43.520: Vladi18, CALL_STATE_IDLE
+23:18:43.527: Vladi18, DATA_CONNECTED
+23:18:43.528: Vl21, DataConnectivity_UP
+Connect to: 89.120.135.155.7000 ....done
+2017-10-02 23:18:47
+V.from onPause()
+ka1d2ack V.from OnStop()
+ka2d18ack ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack ka15d18ack V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka16d18ack ka17d18ack ka18d18ack ka19d18ack 00:18:38.120: Vl22, STATE_IN_SERVICE
+00:18:38.225: Vladi18, DATA_CONNECTED
+ka20d18ack 00:19:39.832: Vl22, STATE_IN_SERVICE
+00:19:39.845: Vladi18, DATA_CONNECTED
+ka21d18ack ka22d18ack ka23d18ack ka24d18ack V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka25d18ack ka26d18ack ka27d18ack ka28d18ack ka29d18ack ka30d18ack ka31d18ack ka32d18ack ka33d18ack ka34d18ack ka35d18ack ka36d18ack ka37d18ack ka38d18ack ka39d18ack ka40d18ack ka41d18ack ka42d18ack ka43d18ack ka44d18ack ka45d18ack ka46d18ack ka47d18ack ka48d18ack ka49d18ack ka50d18ack ka51d18ack ka52d18ack ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack ka58d18ack ka59d18ack ka60d18ack ka61d18ack ka62d18ack ka63d18ack ka64d18ack ka65d18ack ka66d18ack ka67d18ack ka68d18ack ka69d18ack ka70d18ack ka71d18ack ka72d18ack V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka73d18ack ka74d18ack ka75d18ack ka76d18ack ka77d18ack ka78d18ack ka79d18ack ka80d18ack ka81d18ack ka82d18ack ka83d18ack ka84d18ack ka85d18ack ka86d18ack ka87d18ack ka88d18ack ka89d18ack ka90d18ack ka91d18ack ka92d18ack ka93d18ack ka94d18ack ka95d18ack ka96d18ack ka97d18ack ka98d18ack ka99d18ack ka100d18ack ka101d18ack ka102d18ack ka103d18ack ka104d18ack ka105d18ack ka106d18ack ka107d18ack ka108d18ack ka109d18ack ka110d18ack ka111d18ack ka112d18ack ka113d18ack ka114d18ack ka115d18ack ka116d18ack ka117d18ack ka118d18ack ka119d18ack ka120d18ack ka121d18ack ka122d18ack ka123d18ack ka124d18ack ka125d18ack ka126d18ack ka127d18ack ka128d18ack ka129d18ack ka130d18ack ka131d18ack ka132d18ack ka133d18ack ka134d18ack ka135d18ack ka136d18ack ka137d18ack ka138d18ack ka139d18ack ka140d18ack ka141d18ack ka142d18ack ka143d18ack ka144d18ack ka145d18ack ka146d18ack ka147d18ack ka148d18ack ka149d18ack ka150d18ack ka151d18ack ka152d18ack ka153d18ack ka154d18ack ka155d18ack ka156d18ack ka157d18ack ka158d18ack ka159d18ack ka160d18ack ka161d18ack ka162d18ack ka163d18ack ka164d18ack ka165d18ack ka166d18ack ka167d18ack ka168d18ack ka169d18ack ka170d18ack ka171d18ack ka172d18ack ka173d18ack ka174d18ack ka175d18ack ka176d18ack ka177d18ack ka178d18ack ka179d18ack ka180d18ack ka181d18ack ka182d18ack ka183d18ack ka184d18ack ka185d18ack ka186d18ack ka187d18ack ka188d18ack V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+ka189d18ack ka190d18ack ka191d18ack ka192d18ack ka193d18ack ka194d18ack ka195d18ack ka196d18ack ka197d18ack ka198d18ack ka199d18ack ka200d18ack ka201d18ack ka202d18ack ka203d18ack ka204d18ack ka205d18ack ka206d18ack ka207d18ack ka208d18ack ka209d18ack Incomplete read 1, nBytes=-1; buf: pos=0, limit=32, remaining=32
+2017-10-03 09:54:26.146
+
+Vladi13.., we got an Exception in RecvThread: java.lang.Exception: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream
+SocketChannel isConnected() returns true
+Connect to: 89.120.135.155.7000 ....done
+2017-10-03 09:54:26
+ka1d2ack ka2d18ack ka3d18ack ka4d18ack ka5d18ack
+Connect to: 89.120.135.155.7000 ....	//Vl.bug1, why we have here a connection atempt?? This is triggered by ETIMEDOUT below.. see time stamps.. 
+10:08:50.193: Vladi18, CALL_STATE_RINGING
+Connect to: 89.120.135.155.7000 ....
+10:08:50.220: Vladi18, DATA_SUSPENDED
+2017-10-03 10:08:49.817	//Vl.this is ETIMEDOUT time stamp.. which is earlier than CALL_STATE_RINGING above (again.. see time stamps..)
+Connect to: 89.120.135.155.7000 ....
+Vladi13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out)
+SocketChannel isConnected() returns true
+10:08:51.792Connect to: 89.120.135.155.7000 ....: Vl21, DataConnectivity_DOWN
+//Vl.I was very lucky that I catch lines 986 to 994.. 1st of all the order lines are affected by threading effect.. Multiple threads wrote in TCPclient1Activity.et1 EditText.. So, to see events order in time see the time stamps.. 2nd. we have 2 overlapped events 1. ETIMEDOUT SocketException and 2. CALL_STATE_RINGING.. It is a infrequent situation indeed.. The solution is to test (data) connectivity in tcpConnect() before to proceed..
+
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+10:09:03.477: Vladi18, CALL_STATE_IDLE
+10:09:03.760: Vladi18, DATA_CONNECTED
+10:09:03.768: Vl21, DataConnectivity_UP
+10:09:46.418: Vladi18, CALL_STATE_OFFHOOK
+10:09:46.519: Vladi18, DATA_SUSPENDED
+10:09:46.527: Vl21, DataConnectivity_DOWN
+10:10:34.325: Vladi18, CALL_STATE_IDLE
+10:10:34.738: Vladi18, DATA_CONNECTED
+10:10:34.742: Vl21, DataConnectivity_UP
+10:11:53.407: Vladi18, CALL_STATE_OFFHOOK
+10:11:55.003: Vladi18, DATA_SUSPENDED
+10:11:56.554: Vl21, DataConnectivity_DOWN
+10:12:28.086: Vladi18, CALL_STATE_IDLE
+10:12:28.138: Vladi18, DATA_CONNECTED
+10:12:28.436: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+10:54:48.667: Vladi18, CALL_STATE_RINGING
+10:54:48.897: Vladi18, DATA_SUSPENDED
+10:54:48.951: Vl21, DataConnectivity_DOWN
+10:54:54.886: Vladi18, CALL_STATE_OFFHOOK
+10:56:19.984: Vladi18, CALL_STATE_IDLE
+10:56:20.195: Vladi18, DATA_CONNECTED
+10:56:20.541: Vl21, DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+12:57:47.833: Vladi18, CALL_STATE_RINGING
+12:57:48.682: Vladi18, DATA_SUSPENDED
+12:57:48.733: Vl21, DataConnectivity_DOWN
+12:57:59.053: Vladi18, CALL_STATE_OFFHOOK
+12:59:34.814: Vladi18, CALL_STATE_IDLE
+12:59:35.459: Vladi18, DATA_CONNECTED
+12:59:35.469: Vl21, DataConnectivity_UP
+15:56:02.994: Vl18, DATA_DISCONNECTED
+15:56:03.286: Vl21, DataConnectivity_DOWN
+V.from onStart()
+V.from onResume()
+15:57:09.049: Vl21, DataConnectivity_UP
+
+****************** end tag test8, 4:38 PM Monday, October 02, 2017 //Vl. secion's tags: Vl.,log1,CALL_STATE_RINGING,done,AsynchronousCloseException,SocketChannelImpl,CALL_STATE_OFFHOOK,,,,,,
+
+****************** end tag test9, 8:27 AM Wednesday, October 04, 2017//Vl. secion's tags: Vl.,,CALL_STATE_RINGING,done,AsynchronousCloseException,,,,,,,,
+V.from onStart()
+V.from onResume()
+21:58:42.382: Vl22, STATE_IN_SERVICE
+21:58:42.394: Vladi18, CALL_STATE_IDLE
+21:58:42.395: Vl18, DATA_DISCONNECTED
+21:58:42.396: Vl21, DataConnectivity_DOWN
+21:58:51.357: NOT_CONNECTED#OptionsMenuItemCONNECT
+21:58:51.390: CONNECTING#TCP_CONNECT_NO_ACTIVE_NETWORK_CONNECTED
+21:59:08.993: Vladi18, DATA_CONNECTED
+21:59:09.833: Vl21, DataConnectivity_UP
+21:59:09.849: NOT_CONNECTED#DataConnectivity_UP
+22:00:09.909: PRE_CONNECTING#ActiveNetworkConnectedConfirmation
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-03 22:00:10
+
+22:00:10.509: CONNECTING#TCP_CONNECTED
+ka1d2ack ka2d2ack ka3d2ack ka4d2ack ka5d2ack ka6d2ack 
+Vl13.2017-10-03 22:02:03.380
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out)
+Vl13.SocketChannel isConnected() returns true
+22:02:03.385: CONNECTED#SERVER_DISCONNECTED
+Connecting to: 89.120.135.155.7000 ....
+22:02:03.893: Vl18, DATA_DISCONNECTED
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Vl4.Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+
+22:02:03.779: CONNECTING#TCP_CONNECTING_FAILED
+22:02:03.784: CONNECTING#TCP_CONNECT_NO_ACTIVE_NETWORK_CONNECTED
+22:02:04.563: Vl21, DataConnectivity_DOWN
+V.from onPause()
+V.from onResume()
+22:07:29.491: Vladi18, DATA_CONNECTED
+22:07:30.404: Vl21, DataConnectivity_UP
+22:07:30.413: NOT_CONNECTED#DataConnectivity_UP
+22:08:30.478: PRE_CONNECTING#ActiveNetworkConnectedConfirmation
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-03 22:08:31
+
+22:08:31.039: CONNECTING#TCP_CONNECTED
+ka1d2ack ka2d2ack ka3d2ack ka4d2ack 
+V.from onPause()
+V.from OnStop()ka5d2ack ka6d2ack ka7d2ack ka8d2ack ka9d2ack ka10d2ack ka11d2ack ka12d2ack ka13d2ack ka14d2ack ka15d2ack ka16d2ack ka17d2ack ka18d2ack ka19d2ack ka20d2ack ka21d2ack ka22d2ack ka23d2ack ka24d2ack ka25d2ack ka26d2ack ka27d2ack ka28d2ack ka29d2ack ka30d2ack ka31d2ack ka32d2ack ka33d2ack ka34d2ack ka35d2ack ka36d2ack ka37d2ack ka38d2ack ka39d2ack ka40d2ack ka41d2ack ka42d2ack ka43d2ack 
+V.from onStart()
+V.from onResume()ka44d2ack ka45d2ack ka46d2ack 
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()ka47d2ack 
+V.from onPause()
+V.from OnStop()ka48d18ack ka49d18ack ka50d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka51d18ack ka52d18ack ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack ka58d18ack ka59d18ack 
+23:02:22.139: CONNECTED#CALL_STATE_RINGING
+23:02:22.185: Vladi18, CALL_STATE_RINGING
+Vl13.2017-10-03 23:02:22.151
+Vl13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException
+Vl13.SocketChannel isConnected() returns false
+23:02:25.355: Vladi18, DATA_SUSPENDED
+23:02:22.185: NOT_CONNECTED#SERVER_DISCONNECTED
+23:02:25.367: Vl21, DataConnectivity_DOWN
+23:02:39.230: Vladi18, CALL_STATE_IDLE
+23:02:39.559: Vladi18, DATA_CONNECTED
+23:02:40.086: Vl21, DataConnectivity_UP
+23:02:40.295: NOT_CONNECTED#DataConnectivity_UP
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-03 23:02:43
+
+23:02:43.137: CONNECTING#TCP_CONNECTED
+
+V.from onStart()
+V.from onResume()ka1d2ack 
+V.from onPause()
+V.from OnStop()ka2d18ack ka3d18ack ka4d18ack ka5d18ack ka6d18ack 
+23:22:50.895: Vl22, STATE_IN_SERVICE
+23:22:50.967: Vladi18, DATA_CONNECTEDka7d18ack 
+23:24:29.874: Vl22, STATE_IN_SERVICE
+23:24:29.959: Vladi18, DATA_CONNECTEDka8d18ack ka9d18ack 
+Incomplete read 1, nBytes=-1; buf: pos=0, limit=32, remaining=32
+Vl13.2017-10-03 23:29:22.548
+Vl13.., we got an Exception in RecvThread: java.lang.Exception: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream
+Vl13.SocketChannel isConnected() returns true
+23:29:22.548: CONNECTED#SERVER_DISCONNECTED
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-03 23:29:23
+
+23:29:23.505: CONNECTING#TCP_CONNECTED
+ka1d2ack ka2d18ack ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack ka15d18ack ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack ka21d18ack ka22d18ack ka23d18ack ka24d18ack ka25d18ack ka26d18ack ka27d18ack ka28d18ack ka29d18ack ka30d18ack ka31d18ack ka32d18ack ka33d18ack ka34d18ack ka35d18ack ka36d18ack ka37d18ack ka38d18ack ka39d18ack ka40d18ack ka41d18ack ka42d18ack ka43d18ack ka44d18ack ka45d18ack ka46d18ack ka47d18ack ka48d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka49d18ack ka50d18ack ka51d18ack ka52d18ack 
+V.from onStart()
+V.from onResume()
+Vl13.2017-10-04 02:06:42.115	//Vl.here I cut off Data services (GPRS=GSMonly) from system settings..
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out)
+Vl13.SocketChannel isConnected() returns true
+02:06:42.121: CONNECTED#SERVER_DISCONNECTED
+Connecting to: 89.120.135.155.7000 ....	//Vl. Why activeNetworkConnected() returns true??
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Vl4.Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+
+02:06:42.144: CONNECTING#TCP_CONNECTING_FAILED
+Connecting to: 89.120.135.155.7000 ....//Vl. Why activeNetworkConnected() returns true??
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Vl4.Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+
+02:06:42.155: CONNECTING#TCP_CONNECTING_FAILED
+Connecting to: 89.120.135.155.7000 ....
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Vl4.Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+
+02:06:42.181: CONNECTING#TCP_CONNECTING_FAILED
+Connecting to: 89.120.135.155.7000 ....
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable), Vl4.Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ENETUNREACH (Network is unreachable)
+Vladi5. receive thread not launched
+
+02:06:42.193: CONNECTING#TCP_CONNECTING_FAILED
+02:06:42.491: Vl18, DATA_DISCONNECTED
+02:06:43.142: Vl21, DataConnectivity_DOWN	//Vl. this event came to late.. np++ tag "06" In the mean time we had 4 TCP connecting attempts and 4 ENETUNREACH
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+02:28:56.782: Vl21, DataConnectivity_UP
+02:28:56.785: NOT_CONNECTED#DataConnectivity_UP
+V.from onPause()
+V.from OnStop()
+02:31:55.140: Vl21, DataConnectivity_DOWN
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+08:20:05.584: Vl21, DataConnectivity_UP
+08:20:05.879: NOT_CONNECTED#DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+****************** end tag test9, 8:27 AM Wednesday, October 04, 2017, 2017 //Vl. secion's tags: Vl.,,,done,AsynchronousCloseException,,,,,,,,
+
+
+****************** tag test10, 5:18 PM Wednesday, October 04, 2017 //Vl. secion's tags: Vl.,,,done,AsynchronousCloseException,filtered,,,,,,,
+log1:com.example.test1pn.TCPclient1Activity ver.189:
+V.from onStart()
+V.from onResume()
+09:29:14.382: Vl22, STATE_IN_SERVICE
+09:29:14.392: Vladi18, CALL_STATE_IDLE
+09:29:14.393: Vladi18, DATA_CONNECTED
+09:29:14.405: Vl21, DataConnectivity_UP
+09:29:14.407: NOT_CONNECTED#DataConnectivity_UP
+09:29:26.385: NOT_CONNECTED#OptionsMenuItemCONNECT
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-04 09:29:29
+
+09:29:29.556: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+V.from onPause()
+V.from OnStop()ka2d18ack ka3d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka4d18ack ka5d18ack ka6d18ack ka7d18ack 
+V.from onStart()
+V.from onResume()
+Vl13.2017-10-04 09:49:10.436
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out)
+Vl13.SocketChannel isConnected() returns true
+09:49:10.441: CONNECTED#SERVER_DISCONNECTED
+09:49:10.777: Vl18, DATA_DISCONNECTED
+09:49:11.432: Vl21, DataConnectivity_DOWN
+09:49:13.171: CONNECTING#TCP_CONNECT_NO_ACTIVE_NETWORK_CONNECTED
+V.from onPause()
+09:50:33.109: Vl21, DataConnectivity_UP
+09:50:33.122: NOT_CONNECTED#DataConnectivity_UP
+V.from onResume()
+09:51:35.719: PRE_CONNECTING#ActiveNetworkConnectedConfirmation
+Connecting to: 89.120.135.155.7000 ....
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ETIMEDOUT (Connection timed out), Vl4.Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ETIMEDOUT (Connection timed out)
+Vladi5. receive thread not launched
+
+09:51:59.316: CONNECTING#TCP_CONNECTING_FAILED //Vl.don't scare.. here I was on office WiFi which has TCP 7000 filtered..
+Connecting to: 89.120.135.155.7000 ....
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ETIMEDOUT (Connection timed out), Vl4.Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ETIMEDOUT (Connection timed out)
+Vladi5. receive thread not launched
+
+09:52:22.902: CONNECTING#TCP_CONNECTING_FAILED
+Connecting to: 89.120.135.155.7000 ....
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ETIMEDOUT (Connection timed out), Vl4.Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ETIMEDOUT (Connection timed out)
+Vladi5. receive thread not launched
+
+09:52:46.493: CONNECTING#TCP_CONNECTING_FAILED
+Connecting to: 89.120.135.155.7000 ....
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ETIMEDOUT (Connection timed out), Vl4.Throwable detail message: failed to connect to /89.120.135.155 (port 7000): connect failed: ETIMEDOUT (Connection timed out)
+Vladi5. receive thread not launched
+
+09:53:10.093: CONNECTING#TCP_CONNECTING_FAILED
+09:54:35.213: Vl21, DataConnectivity_DOWN
+09:57:24.418: Vladi18, DATA_CONNECTED
+09:57:25.215: Vl21, DataConnectivity_UP
+09:57:25.219: NOT_CONNECTED#DataConnectivity_UP
+09:57:43.086: NOT_CONNECTED#OptionsMenuItemCONNECT
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-04 09:57:45
+
+09:57:45.825: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+V.from onPause()
+V.from OnStop()ka2d18ack ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka13d18ack ka14d18ack ka15d18ack ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack 
+V.from onStart()
+V.from onResume()ka21d18ack 
+V.from onPause()
+V.from OnStop()ka22d18ack ka23d18ack ka24d18ack ka25d18ack ka26d18ack ka27d18ack ka28d18ack 
+11:20:35.603: CONNECTED#CALL_STATE_RINGING
+11:20:35.613: Vladi18, CALL_STATE_RINGING
+Vl13.2017-10-04 11:20:35.611
+Vl13.., we got an g    RecvThread: java.nio.channels.AsynchronousCloseException
+Vl13.SocketChannel isConnected() returns false
+11:20:35.615: NOT_CONNECTED#SERVER_DISCONNECTED
+11:20:35.673: Vladi18, DATA_SUSPENDED
+11:20:36.658: Vl21, DataConnectivity_DOWN
+11:20:45.759: NOT_CONNECTED#CALL_STATE_OFFHOOK
+11:20:45.768: Vladi18, CALL_STATE_OFFHOOK
+11:26:17.288: Vladi18, CALL_STATE_IDLE
+11:26:17.685: Vladi18, DATA_CONNECTED
+11:26:17.889: Vl21, DataConnectivity_UP
+11:26:18.253: NOT_CONNECTED#DataConnectivity_UP
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-04 11:26:24
+
+
+11:26:24.889: CONNECTING#TCP_CONNECTEDka1d2ack 
+V.from onStart()
+V.from onResume()ka2d18ack ka3d18ack 
+V.from onPause()
+V.from OnStop()ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack ka15d18ack ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack ka21d18ack ka22d18ack ka23d18ack ka24d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka25d18ack ka26d18ack ka27d18ack ka28d18ack ka29d18ack ka30d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+12:56:00.378: CONNECTED#CALL_STATE_OFFHOOK
+12:56:00.514: Vladi18, CALL_STATE_OFFHOOK
+12:56:00.887: Vladi18, DATA_SUSPENDED//Vl.in fact this is after ETIMEDOUT (with about 600ms)
+Vl13.2017-10-04 12:56:00.271
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out) //Vl.time stamp is just above..
+Vl13.SocketChannel isConnected() returns true	//Vl.Maybe we can avoid sc.close()
+12:56:00.272: CONNECTED#SERVER_DISCONNECTED //Vl.we have a problem.. this event is in fact earlier than CALL_STATE_OFFHOOK
+12:56:01.467: Vl21, DataConnectivity_DOWN								//Vl.that's why we have ETIMEDOUT instead of AsynchronousCloseException
+12:56:03.041: CONNECTING#TCP_CONNECT_NO_ACTIVE_NETWORK_CONNECTED
+12:58:27.242: Vladi18, CALL_STATE_IDLE
+12:58:27.339: Vladi18, DATA_CONNECTED
+12:58:27.732: Vl21, DataConnectivity_UP
+12:58:27.737: NOT_CONNECTED#DataConnectivity_UP
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-04 12:58:31
+
+12:58:31.866: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+V.from onStart()
+V.from onResume()ka2d18ack 
+V.from onPause()
+V.from OnStop()ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack ka15d18ack ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack ka21d18ack ka22d18ack ka23d18ack ka24d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka25d18ack ka26d18ack ka27d18ack ka28d18ack ka29d18ack ka30d18ack ka31d18ack ka32d18ack ka33d18ack ka34d18ack ka35d18ack ka36d18ack ka37d18ack ka38d18ack ka39d18ack ka40d18ack ka41d18ack ka42d18ack ka43d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+Vladi19. sent: [B@412769f8ka44d18ack ffcdfg //Vl.
+
+ka45d18ack 
+V.from onPause()
+V.from OnStop()ka46d18ack ka47d18ack ka48d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka49d18ack ka50d18ack ka51d18ack ka52d18ack ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack ka58d18ack ka59d18ack ka60d18ack ka61d18ack ka62d18ack 
+V.from onStart()
+V.from onResume()ka63d18ack 
+V.from onPause()
+V.from OnStop()ka64d18ack ka65d18ack ka66d18ack ka67d18ack ka68d18ack ka69d18ack ka70d18ack ka71d18ack ka72d18ack ka73d18ack ka74d18ack ka75d18ack ka76d18ack ka77d18ack ka78d18ack ka79d18ack 
+V.from onStart()
+V.from onResume()ka80d18ack ka81d18ack 
+V.from onPause()
+V.from OnStop()
+Vl13.2017-10-04 17:03:11.820
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out) //Vl. here we switched from GPRS to 3G
+Vl13.SocketChannel isConnected() returns true
+17:03:11.848: CONNECTED#SERVER_DISCONNECTED
+17:03:12.250: Vl18, DATA_DISCONNECTED	//Vl.important: DATA_DISCONNECTED/DATA_CONNECTED are fired only for GPRS and 3G
+17:03:12.932: Vl21, DataConnectivity_DOWN
+17:03:13.118: Vl22, STATE_OUT_OF_SERVICE	//Vl. fired when we switched from GPRS to 3G
+17:03:13.530: Vl18, DATA_DISCONNECTED
+17:03:13.693: Vl21, DataConnectivity_DOWN	//Vl.important: DataConnectivity_DOWN/DataConnectivity_UP are fired for ALL data connections GPRS and 3G and WiFi
+17:03:14.518: CONNECTING#TCP_CONNECT_NO_ACTIVE_NETWORK_CONNECTED
+17:03:14.880: Vl22, STATE_EMERGENCY_ONLY
+17:03:17.856: Vl22, STATE_IN_SERVICE
+17:03:18.120: Vl18, DATA_DISCONNECTED
+17:03:19.236: Vladi18, DATA_CONNECTED
+17:03:19.861: Vl21, DataConnectivity_UP
+17:03:20.032: NOT_CONNECTED#DataConnectivity_UP
+V.from onStart()
+V.from onResume()
+17:04:22.644: PRE_CONNECTING#ActiveNetworkConnectedConfirmation
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-04 17:04:25
+
+17:04:25.854: CONNECTING#TCP_CONNECTED
+ka1d2ack ka2d18ack 
+17:08:33.131: CONNECTED#CALL_STATE_RINGING
+17:08:33.139: Vladi18, CALL_STATE_RINGING	//Vl.in 3G (and most probably WiFi) we don't have DATA_SUSPENDED
+Vl13.2017-10-04 17:08:33.135
+Vl13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException
+Vl13.SocketChannel isConnected() returns false
+17:08:33.139: NOT_CONNECTED#SERVER_DISCONNECTED //Vl.not treated
+V.from onPause()
+17:08:44.070: Vladi18, CALL_STATE_IDLE //Vl.here (we are in 3G), DataConnectivity_UP event never come.., so we can't recover..
+V.from onResume()
+****************** end tag test10, 5:18 PM Wednesday, October 04, 2017 //Vl. section's tags: Vl.,,,done,AsynchronousCloseException,GPRS,3G,DATA_SUSPENDED,filtered,,,,
+
+
+****************** end tag test11, 8:01 PM Thursday, October 05, 2017 //Vl. section's tags: Vl.,,,,,,,,,,,,,,,,
+log1: for com.example.test1pn.TCPclient1Activity ver.191:
+=INFO REPORT==== 4-Oct-2017::23:12:10 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,3>
+=INFO REPORT==== 5-Oct-2017::08:03:02 ===
+Vl3. session closed with {error,timeout}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 5-Oct-2017::08:39:41 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,3>
+=INFO REPORT==== 5-Oct-2017::11:02:52 ===
+Vl3. session closed with {error,timeout}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 5-Oct-2017::11:11:49 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,3>
+=INFO REPORT==== 5-Oct-2017::12:22:00 ===
+Vl3. session closed with {error,timeout}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 5-Oct-2017::12:22:20 ===
+TCP client connected.
+1,2,3>
+=INFO REPORT==== 5-Oct-2017::12:28:23 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 5-Oct-2017::12:28:23 ===
+TCP client connected.
+1,2,3>
+=INFO REPORT==== 5-Oct-2017::12:34:27 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 5-Oct-2017::12:34:27 ===
+TCP client connected.
+1,2,3,4,5,6,3>	//Vl.7th response from TCPclient1Activity never came.., and we have no clue why test1pn app crashed..
+=INFO REPORT==== 5-Oct-2017::12:52:39 === //Vl.we don't have phone call event around this time stamp
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+end log1: for com.example.test1pn.TCPclient1Activity ver.191:
+****************** end tag test11, 8:01 PM Thursday, October 05, 2017 //Vl. section's tags: Vl.,,,,,,,,,,,,,,,,
+
+
+****************** end tag test12, 6:44 PM Friday, October 06, 2017 //Vl. section's tags: Vl.,,,,,,,,,,,,,,,,
+log1: for com.example.test1pn.TCPclient1Activity ver.193 where we killed the erl process:(the whole virtual Erlang machine):
+V.from onStart()
+V.from onResume()
+17:33:41.536: Vl22, STATE_IN_SERVICE
+17:33:41.537: Vladi18, CALL_STATE_IDLE
+17:33:41.538: Vladi18, DATA_CONNECTED
+17:33:41.540: Vl21, DataConnectivity_UP
+17:33:41.546: NOT_CONNECTED#DataConnectivity_UP
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+17:34:26.067: NOT_CONNECTED#OptionsMenuItemCONNECT
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-06 17:34:29
+
+17:34:29.222: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+V.from onPause()
+V.from OnStop()
+17:34:56.230: Vladi18, CALL_STATE_OFFHOOK
+17:34:56.396: CONNECTED#DATA_SUSPENDED
+17:34:56.414: Vladi18, DATA_SUSPENDED
+Vl13.2017-10-06 17:34:56.673
+Vl13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException, Vl13.Throwable detail message: null
+Vl13.SocketChannel isConnected() returns false
+17:34:59.147: Vl21, DataConnectivity_DOWN
+17:34:59.256: NOT_CONNECTED#DataConnectivity_DOWN
+17:37:13.394: Vladi18, CALL_STATE_IDLE
+17:37:13.501: Vladi18, DATA_CONNECTED
+17:37:14.086: Vl21, DataConnectivity_UP
+17:37:14.094: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-06 17:37:17
+
+17:37:17.774: CONNECTING#TCP_CONNECTED
+ka1d2ack ka2d18ack ka3d18ack ka4d18ack ka5d18ack 
+17:51:10.084: Vladi18, CALL_STATE_RINGING
+17:51:10.179: CONNECTED#DATA_SUSPENDED
+17:51:11.022: Vladi18, DATA_SUSPENDED
+17:51:11.025: Vl21, DataConnectivity_DOWN
+17:51:11.079: NOT_CONNECTED#DataConnectivity_DOWN
+Vl13.2017-10-06 17:51:10.952
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out), Vl13.Throwable detail message: recvfrom failed: ETIMEDOUT (Connection timed out)
+Vl13.SocketChannel isConnected() returns true
+17:51:27.249: Vladi18, CALL_STATE_OFFHOOK
+17:55:39.899: Vladi18, CALL_STATE_IDLE
+17:55:40.029: Vladi18, DATA_CONNECTED
+17:55:40.634: Vl21, DataConnectivity_UP
+17:55:40.654: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-06 17:55:46
+
+17:55:46.566: CONNECTING#TCP_CONNECTED
+ka1d2ack ka2d18ack ka3d18ack ka4d18ack 
+18:05:12.237: Vladi18, CALL_STATE_OFFHOOK
+18:05:12.364: CONNECTED#DATA_SUSPENDED
+18:05:12.681: Vladi18, DATA_SUSPENDED
+Vl13.2017-10-06 18:05:12.533
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out), Vl13.Throwable detail message: recvfrom failed: ETIMEDOUT (Connection timed out)
+Vl13.SocketChannel isConnected() returns true
+18:05:13.865: Vl21, DataConnectivity_DOWN
+18:05:16.532: NOT_CONNECTED#DataConnectivity_DOWN
+18:05:46.563: Vladi18, CALL_STATE_IDLE
+18:05:47.080: Vladi18, DATA_CONNECTED
+18:05:47.546: Vl21, DataConnectivity_UP
+18:05:47.550: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-06 18:05:51
+
+18:05:52.002: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+18:08:14.174: Vladi18, CALL_STATE_RINGING
+18:08:15.023: CONNECTED#DATA_SUSPENDED
+18:08:15.028: Vladi18, DATA_SUSPENDED
+Vl13.2017-10-06 18:08:14.326
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out), Vl13.Throwable detail message: recvfrom failed: ETIMEDOUT (Connection timed out)
+Vl13.SocketChannel isConnected() returns true
+18:08:15.079: Vl21, DataConnectivity_DOWN
+18:08:15.240: NOT_CONNECTED#DataConnectivity_DOWN
+18:08:20.821: Vladi18, CALL_STATE_OFFHOOK
+18:12:33.498: Vladi18, CALL_STATE_IDLE
+18:12:34.160: Vladi18, DATA_CONNECTED
+18:12:34.662: Vl21, DataConnectivity_UP
+18:12:34.666: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-06 18:12:40
+
+18:12:40.487: CONNECTING#TCP_CONNECTED
+ka1d2ack ka2d18ack ka3d18ack ka4d18ack 
+V.from onStart()
+V.from onResume()ka5d18ack 
+Incomplete read 1, nBytes=-1; buf: pos=0, limit=32, remaining=32 //Vl.here we killed the erl process..
+Vl13.2017-10-06 18:25:33.550	//Vl.TCPclient1Activity instantly react with the just below exception.., so Erlang send a RST flag..
+Vl13.., we got an Exception in RecvThread: java.lang.Exception: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream, Vl13.Throwable detail message: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream
+Vl13.SocketChannel isConnected() returns true //Vl. and this is the end.., without event, without RecvThread.., menu item "Connect" remained disabled..
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+end log1: for com.example.test1pn.TCPclient1Activity ver.193 where we killed the erl process (the whole virtual Erlang machine):
+****************** end tag test12, 6:44 PM Friday, October 06, 2017 //Vl. section's tags: Vl.,,,,,,,,,,,,,,,,
+
+
+****************** tag test13, 5:11 PM Wednesday, October 11, 2017 //Vl. section's tags: Vl.,off,stamp,,,,,,,,,,,,,,
+log1: for com.example.test1pn.TCPclient1Activity ver.194 where ..Gabi powered off the (home) router..
+V.from onStart()
+V.from onResume()
+14:29:47.997: Vl22, STATE_IN_SERVICE
+14:29:48.001: Vladi18, CALL_STATE_IDLE
+14:29:48.008: Vladi18, DATA_CONNECTED
+14:29:48.010: Vl21, DataConnectivity_UP
+14:29:48.011: NOT_CONNECTED#DataConnectivity_UP
+14:29:52.017: NOT_CONNECTED#OptionsMenuItemCONNECT
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-07 14:29:55	//Vl.start day/time stamp.
+
+14:29:55.142: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+V.from onPause()
+V.from OnStop()ka2d18ack ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack ka15d18ack ka16d18ack ka17d18ack 
+ka51d18ack ka52d18ack ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka58d18ack ka59d18ack ka60d18ack ka61d18ack ka62d18ack ka63d18ack ka64d18ack ka65d18ack ka66d18ack ka67d18ack ka68d18ack ka69d18ack ka70d18ack ka71d18ack ka72d18ack ka73d18ack ka74d18ack ka75d18ack ka76d18ack ka77d18ack ka78d18ack ka79d18ack ka80d18ack ka81d18ack ka82d18ack ka83d18ack ka84d18ack ka85d18ack ka86d18ack ka87d18ack ka88d18ack ka89d18ack ka90d18ack ka91d18ack ka92d18ack ka93d18ack ka94d18ack ka95d18ack ka96d18ack ka97d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+....
+ka38d18ack 
+13:29:26.821: Vladi18, CALL_STATE_RINGING
+13:29:26.911: CONNECTED#DATA_SUSPENDED
+13:29:26.935: Vladi18, DATA_SUSPENDED
+Vl13.2017-10-08 13:29:26.934
+Vl13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException, Vl13.Throwable detail message: null
+13:29:28.622: Vl21, DataConnectivity_DOWN
+13:29:28.628: NOT_CONNECTED#DataConnectivity_DOWN
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+13:29:28.942: NOT_CONNECTED#SERVER_DISCONNECTED
+13:29:42.595: Vladi18, CALL_STATE_OFFHOOK
+13:29:49.975: Vladi18, CALL_STATE_IDLE
+13:29:50.990: Vladi18, DATA_CONNECTED
+13:29:51.602: Vl21, DataConnectivity_UP
+13:29:51.971: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-08 13:29:55
+13:29:55.251: CONNECTING#TCP_CONNECTED
+ka1d2ack ka2d18ack ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack 
+....
+ka166d18ack ka167d18ack ka168d18ack ka169d18ack ka170d18ack ka171d18ack ka172d18ack ka173d18ack ka174d18ack ka175d18ack 
+V.from onStart()
+V.from onResume()ka176d18ack 
+Vladi19. sending: [B@41f48d20, [B@41f48d20
+V.from onPause()
+V.from OnStop()ka177d18ack Vladi1
+....
+V.from onPause()
+V.from OnStop()
+21:26:25.845: Vladi18, CALL_STATE_OFFHOOK	//Vl.here I called Aurel.. no answer..
+21:26:27.416: CONNECTED#DATA_SUSPENDED
+21:26:27.562: Vladi18, DATA_SUSPENDED
+Vl13.2017-10-09 21:26:27.559
+Vl13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException, Vl13.Throwable detail message: null
+21:26:28.660: Vl21, DataConnectivity_DOWN
+21:26:28.668: NOT_CONNECTED#DataConnectivity_DOWN
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+21:26:29.574: NOT_CONNECTED#SERVER_DISCONNECTED
+21:26:56.177: Vladi18, CALL_STATE_IDLE
+21:26:56.581: Vladi18, DATA_CONNECTED
+21:27:02.365: Vl21, DataConnectivity_UP
+21:27:02.377: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....
+21:27:07.810: Vladi18, CALL_STATE_RINGING	//Vl.here Aurel called me back.. while the app is in "Connecting to"
+21:27:07.983: CONNECTING#DATA_SUSPENDED		//Vl.we should consider this case as well..
+21:27:08.520: Vladi18, DATA_SUSPENDED
+21:27:09.649: Vl21, DataConnectivity_DOWN
+21:27:09.667: NOT_CONNECTED#DataConnectivity_DOWN
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ETIMEDOUT (Connection timed out)
+Vladi5. receive thread not launched
+
+21:27:09.650: CONNECTING#TCP_CONNECTING_FAILED
+21:27:13.174: Vladi18, CALL_STATE_OFFHOOK
+21:28:29.447: Vladi18, CALL_STATE_IDLE
+21:28:29.933: Vladi18, DATA_CONNECTED
+21:28:30.642: Vl21, DataConnectivity_UP
+21:28:30.951: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done	//Vl.however.., miraculously, the phone has recovered
+2017-10-09 21:28:33
+21:28:33.753: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+V.from onStart()
+V.from onResume()ka2d18ack ka3d18ack ka4d18ack 
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+....
+V.from onPause()
+V.from OnStop()ka39d18ack ka40d18ack ka41d18ack ka42d18ack ka43d18ack ka44d18ack ka45d18ack ka46d18ack ka47d18ack ka48d18ack ka49d18ack ka50d18ack ka51d18ack ka52d18ack ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack ka58d18ack ka59d18ack ka60d18ack ka61d18ack ka62d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka63d18ack ka64d18ack //Vl.here Gabi powered off the (home) router..
+00:01:05.657: Vl22, STATE_IN_SERVICE
+00:01:05.661: Vladi18, DATA_CONNECTED
+00:03:17.888: Vl22, STATE_IN_SERVICE
+00:03:17.967: Vladi18, DATA_CONNECTED
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume() //Vl.as you can see the phone never recovered.. I think I discovered the bug..
+end log1: for com.example.test1pn.TCPclient1Activity ver.194 where ..Gabi powered off the (home) router..
+
+log2:
+Eshell V6.2  (abort with ^G)
+1> ls().
+VladiReadme1.txt       echo_server.beam       echo_server.erl
+logs1                  socket_server.beam     socket_server.erl
+ok
+2> echo_server:start(7000).
+echo_server rel.11, using gen_tcp:recv/3 & non-blocking graph
+socket_server rel.10
+reach server accept state
+ok
+3>
+....
+=INFO REPORT==== 10-Oct-2017::20:40:30 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,3>
+=INFO REPORT==== 10-Oct-2017::23:55:26 ===	//Vl.here Gabi powered off the (home) router.. end day/time stamp, np++ tags; off,error,timeout
+Vl3. session closed with {error,timeout}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+end log2:
+****************** end tag test13, 5:11 PM Wednesday, October 11, 2017 //Vl. section's tags: Vl.,off,error,timeout,stamp,,,,,,,,,,,,,
+
+****************** tag fromUncaughtExceptionHandler_1, 5:11 2:18 PM Thursday, October 12, 2017 //Vl. section's tags: Vl.,caused,,,,,,,,,,,,,,,,,,,,,,
+log1: for com.example.test1pn.TCPclient1Activity ver.196
+2017-10-12 11:03:49.728
+App, Vl1. from my defaultUncaughtExceptionHandler(..):java.lang.RuntimeException: Unable to start activity ComponentInfo{com.example.test1pn/com.example.test1pn.TCPclient1Activity}: java.lang.NullPointerException, Vl1.Throwable detail message: Unable to start activity ComponentInfo{com.example.test1pn/com.example.test1pn.TCPclient1Activity}: java.lang.NullPointerException
+android.app.ActivityThread.performLaunchActivity(ActivityThread.java:1970)
+android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:1995)
+android.app.ActivityThread.access$600(ActivityThread.java:128)
+android.app.ActivityThread$H.handleMessage(ActivityThread.java:1161)
+android.os.Handler.dispatchMessage(Handler.java:99)
+android.os.Looper.loop(Looper.java:137)
+android.app.ActivityThread.main(ActivityThread.java:4517)
+java.lang.reflect.Method.invokeNative(Native Method)
+java.lang.reflect.Method.invoke(Method.java:511)
+com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:993)
+com.android.internal.os.ZygoteInit.main(ZygoteInit.java:760)
+dalvik.system.NativeStart.main(Native Method)
+Vl. caused by:
+com.example.test1pn.TCPclient1Activity.onCreateOptionsMenu(TCPclient1Activity.java:141)
+android.app.Activity.onCreatePanelMenu(Activity.java:2449)
+android.support.v4.app.FragmentActivity.onCreatePanelMenu(FragmentActivity.java:358)
+android.support.v7.app.ActionBarActivity.superOnCreatePanelMenu(ActionBarActivity.java:232)
+android.support.v7.app.ActionBarActivityDelegateICS.onCreatePanelMenu(ActionBarActivityDelegateICS.java:146)
+android.support.v7.app.ActionBarActivity.onCreatePanelMenu(ActionBarActivity.java:199)
+android.support.v7.app.ActionBarActivityDelegateICS$WindowCallbackWrapper.onCreatePanelMenu(ActionBarActivityDelegateICS.java:293)
+com.android.internal.policy.impl.PhoneWindow.preparePanel(PhoneWindow.java:411)
+com.android.internal.policy.impl.PhoneWindow.invalidatePanelMenu(PhoneWindow.java:763)
+com.android.internal.policy.impl.PhoneWindow.restorePanelState(PhoneWindow.java:1814)
+com.android.internal.policy.impl.PhoneWindow.restoreHierarchyState(PhoneWindow.java:1769)
+android.app.Activity.onRestoreInstanceState(Activity.java:906)
+android.app.Activity.performRestoreInstanceState(Activity.java:878)
+android.app.Instrumentation.callActivityOnRestoreInstanceState(Instrumentation.java:1104)
+android.app.ActivityThread.performLaunchActivity(ActivityThread.java:1948)
+android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:1995)
+android.app.ActivityThread.access$600(ActivityThread.java:128)
+android.app.ActivityThread$H.handleMessage(ActivityThread.java:1161)
+android.os.Handler.dispatchMessage(Handler.java:99)
+android.os.Looper.loop(Looper.java:137)
+android.app.ActivityThread.main(ActivityThread.java:4517)
+java.lang.reflect.Method.invokeNative(Native Method)
+java.lang.reflect.Method.invoke(Method.java:511)
+com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:993)
+com.android.internal.os.ZygoteInit.main(ZygoteInit.java:760)
+dalvik.system.NativeStart.main(Native Method)
+end log1: for com.example.test1pn.TCPclient1Activity ver.196
+****************** end tag fromUncaughtExceptionHandler_1, 5:11 2:18 PM Thursday, October 12, 2017 //Vl. section's tags: Vl.,caused,,,,,,,,,,,,,,,,,,,,,
+
+
+****************** tag test15, 6:00 PM Monday, October 16, 2017, 2017 //Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,
+log1:
+2017-10-13 19:47:41.594V.from the end of onCreate()
+V.from onStart()
+V.from onResume()
+19:47:41.636: Vl22, STATE_IN_SERVICE
+19:47:41.637: Vladi18, CALL_STATE_IDLE
+19:47:41.640: Vladi18, DATA_CONNECTED
+19:47:41.645: Vl21, DataConnectivity_UP
+19:47:41.647: NOT_CONNECTED#DataConnectivity_UP
+19:47:45.796: NOT_CONNECTED#OptionsMenuItemCONNECT
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-13 19:47:48
+
+19:47:48.888: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+Vl13.2017-10-13 19:48:05.421
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out), Vl13.Throwable detail message: recvfrom failed: ETIMEDOUT (Connection timed out)
+19:48:05.602: Vl18, DATA_DISCONNECTED
+19:48:06.262: Vl21, DataConnectivity_DOWN
+19:48:06.267: CONNECTED#DataConnectivity_DOWN
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+19:48:07.438: NOT_CONNECTED#SERVER_DISCONNECTED .. not treated.
+19:48:25.039: Vladi18, DATA_CONNECTED
+19:48:25.862: Vl21, DataConnectivity_UP
+19:48:25.866: NOT_CONNECTED#DataConnectivity_UP
+Vl.switched to PRE_CONNECTING
+19:49:25.925: PRE_CONNECTING#ActiveNetworkConnectedConfirmation
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-13 19:49:28
+
+19:49:29.008: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.ka2d18ack 
+Vl13.2017-10-13 19:54:03.844
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out), Vl13.Throwable detail message: recvfrom failed: ETIMEDOUT (Connection timed out)
+19:54:04.039: Vl18, DATA_DISCONNECTED
+19:54:04.535: Vl21, DataConnectivity_DOWN
+19:54:04.544: CONNECTED#DataConnectivity_DOWN
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+19:54:05.849: NOT_CONNECTED#SERVER_DISCONNECTED .. not treated.
+19:57:25.068: Vladi18, DATA_CONNECTED
+19:57:25.862: Vl21, DataConnectivity_UP
+19:57:25.889: NOT_CONNECTED#DataConnectivity_UP
+Vl.switched to PRE_CONNECTING
+V.from onPause()
+V.from OnStop()
+19:58:26.201: PRE_CONNECTING#ActiveNetworkConnectedConfirmation
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-13 19:58:57
+
+19:58:57.176: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.ka2d18ack ka3d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack 
+V.from onStart()
+V.from onResume()ka15d18ack 
+V.from onPause()
+V.from OnStop()ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()
+Vl13.2017-10-13 20:58:23.570
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out), Vl13.Throwable detail message: recvfrom failed: ETIMEDOUT (Connection timed out)
+20:58:23.742: Vl18, DATA_DISCONNECTED
+20:58:24.273: Vl21, DataConnectivity_DOWN
+20:58:24.277: CONNECTED#DataConnectivity_DOWN
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+20:58:25.645: NOT_CONNECTED#SERVER_DISCONNECTED .. not treated.
+V.from onStart()
+V.from onResume()
+20:59:34.444: Vladi18, DATA_CONNECTED
+20:59:35.220: Vl21, DataConnectivity_UP
+20:59:35.224: NOT_CONNECTED#DataConnectivity_UP
+Vl.switched to PRE_CONNECTING
+V.from onPause()
+V.from OnStop()
+21:00:35.286: PRE_CONNECTING#ActiveNetworkConnectedConfirmation
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-13 21:03:07
+
+21:03:07.515: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka2d18ack ka3d18ack ka4d18ack ka5d18ack 
+21:16:56.677: Vl22, STATE_IN_SERVICE
+21:16:56.690: Vladi18, DATA_CONNECTEDka6d18ack 
+21:19:44.620: Vl22, STATE_IN_SERVICE
+21:19:44.844: Vladi18, DATA_CONNECTEDka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack ka15d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack ka21d18ack ka22d18ack ka23d18ack ka24d18ack ka25d18ack ka26d18ack ka27d18ack ka28d18ack ka29d18ack ka30d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka31d18ack ka32d18ack ka33d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka34d18ack ka35d18ack ka36d18ack ka37d18ack ka38d18ack ka39d18ack ka40d18ack ka41d18ack ka42d18ack ka43d18ack ka44d18ack ka45d18ack ka46d18ack ka47d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka48d18ack ka49d18ack ka50d18ack ka51d18ack ka52d18ack ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack ka58d18ack ka59d18ack ka60d18ack ka61d18ack ka62d18ack ka63d18ack ka64d18ack ka65d18ack ka66d18ack ka67d18ack ka68d18ack ka69d18ack ka70d18ack ka71d18ack ka72d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from onResume()
+09:29:13.748: Vl22, STATE_IN_SERVICE
+09:29:13.748: Vladi18, CALL_STATE_IDLE
+09:29:13.749: Vladi18, DATA_CONNECTED
+09:29:13.751: Vl21, DataConnectivity_UP
+09:29:13.754: NOT_CONNECTED#DataConnectivity_UP
+V.from onPause()
+V.from OnStop()
+end log1.
+
+log2: com.example.test1pn.TCPclient1Activity ver.199//Vl. section's tags: Vl.,NOT_CONNECTED,,,,,,,,,,,,,,,,,
+2017-10-15 22:16:34.723V.from the end of onCreate()
+V.from onStart()
+V.from onResume()
+22:16:34.742: Vl22, STATE_IN_SERVICE
+22:16:34.743: Vladi18, CALL_STATE_IDLE
+22:16:34.748: Vladi18, DATA_CONNECTED
+22:16:34.757: Vl21, DataConnectivity_UP
+22:16:34.758: NOT_CONNECTED#DataConnectivity_UP
+22:16:39.638: NOT_CONNECTED#OptionsMenuItemCONNECT
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-15 22:16:42
+
+22:16:42.694: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onPause()
+V.from OnStop()ka2d18ack ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack ka15d18ack ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack ka21d18ack ka22d18ack ka23d18ack ka24d18ack ka25d18ack ka26d18ack ka27d18ack ka28d18ack ka29d18ack ka30d18ack ka31d18ack ka32d18ack ka33d18ack 
+V.from onStart()
+V.from onResume()ka34d18ack 
+V.from onPause()
+V.from OnStop()ka35d18ack ka36d18ack ka37d18ack ka38d18ack ka39d18ack ka40d18ack ka41d18ack ka42d18ack ka43d18ack ka44d18ack ka45d18ack ka46d18ack ka47d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka48d18ack ka49d18ack ka50d18ack ka51d18ack ka52d18ack ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack ka58d18ack ka59d18ack ka60d18ack ka61d18ack ka62d18ack 
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from OnStop()ka63d18ack ka64d18ack ka65d18ack ka66d18ack ka67d18ack ka68d18ack ka69d18ack ka70d18ack ka71d18ack ka72d18ack ka73d18ack ka74d18ack ka75d18ack ka76d18ack ka77d18ack ka78d18ack ka79d18ack ka80d18ack ka81d18ack ka82d18ack ka83d18ack ka84d18ack ka85d18ack  ka126d18ack ka127d18ack ka128d18ack ka129d18ack ka130d18ack ka131d18ack ka132d18ack ka133d18ack ka134d18ack ka135d18ack ka136d18ack ka137d18ack ka138d18ack ka139d18ack ka140d18ack ka141d18ack ka142d18ack ka143d18ack ka144d18ack ka145d18ack ka146d18ack ka147d18ack ka148d18ack ka149d18ack ka150d18ack ka151d18ack ka152d18ack ka153d18ack ka154d18ack ka155d18ack ka156d18ack ka157d18ack ka158d18ack ka159d18ack ka160d18ack ka161d18ack ka162d18ack ka163d18ack ka164d18ack ka165d18ack ka166d18ack ka167d18ack ka168d18ack ka169d18ack ka170d18ack ka171d18ack ka172d18ack ka173d18ack ka174d18ack ka175d18ack ka176d18ack ka177d18ack ka178d18ack ka179d18ack ka180d18ack ka181d18ack ka182d18ack ka183d18ack ka184d18ack ka185d18ack ka186d18ack g ka189d18ack ka190d18ack ka191d18ack ka192d18ack ka193d18ack ka194d18ack ka195d18ack ka196d18ack ka197d18ack ka198d18ack ka199d18ack ka200d18ack ka201d18ack ka202d18ack ka203d18ack ka204d18ack ka205d18ack ka206d18ack ka207d18ack ka208d18ack ka209d18ack ka210d18ack ka211d18ack ka212d18ack ka213d18ack ka214d18ack ka215d18ack ka216d18ack ka217d18ack ka218d18ack ka219d18ack ka220d18ack ka221d18ack ka222d18ack ka223d18ack ka224d18ack ka225d18ack ka226d18ack ka227d18ack ka228d18ack ka229d18ack 
+09:50:48.715: Vl22, STATE_IN_SERVICE
+09:50:49.089: Vladi18, DATA_CONNECTED
+09:52:07.609: Vl22, STATE_IN_SERVICE
+09:52:07.669: Vladi18, DATA_CONNECTED
+09:52:38.626: Vl22, STATE_IN_SERVICE
+09:52:38.659: Vladi18, DATA_CONNECTED
+09:53:08.010: Vl22, STATE_IN_SERVICE
+09:53:08.013: Vladi18, DATA_CONNECTED
+09:53:13.701: Vl22, STATE_IN_SERVICE
+09:53:13.704: Vladi18, DATA_CONNECTEDka230d18ack 
+09:53:54.683: Vl22, STATE_IN_SERVICE
+09:53:54.689: Vladi18, DATA_CONNECTEDka231d18ack 
+V.from onStart()
+V.from onResume()ka232d18ack 
+Incomplete read 1, nBytes=-1; buf: pos=0, limit=32, remaining=32
+Vl13.2017-10-16 10:00:16.004
+Vl13.., we got an Exception in RecvThread: java.lang.Exception: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream, Vl13.Throwable detail message: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream
+Vl13.SocketChannel isConnected() returns true.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+10:00:18.006: CONNECTED#SERVER_DISCONNECTED
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-16 10:00:21
+
+10:00:21.079: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onPause()
+V.from onResume()	//Vl.here I checked the app.., the time stamp should be as below 14:44:01.935.. hmm..
+14:44:01.935: Vl22, STATE_IN_SERVICE
+14:44:01.935: Vladi18, CALL_STATE_IDLE
+14:44:01.936: Vladi18, DATA_CONNECTED
+14:44:01.937: Vl21, DataConnectivity_UP
+14:44:01.938: NOT_CONNECTED#DataConnectivity_UP //Vl.how we reached NOT_CONNECTED state without event??
+V.from onPause()
+V.from OnStop()
+V.from onStart()
+V.from onResume()
+V.from onPause()
+V.from onResume()	//Vl.here I checked the app.., the time stamp should be as below 17:42:49.662.. hmm..
+17:42:49.662: Vl22, STATE_IN_SERVICE
+17:42:49.663: Vladi18, CALL_STATE_IDLE
+17:42:49.663: Vladi18, DATA_CONNECTED
+17:42:49.664: Vl21, DataConnectivity_UP
+17:42:49.665: NOT_CONNECTED#DataConnectivity_UP
+end log2 com.example.test1pn.TCPclient1Activity ver.199.//Vl. section's tags: Vl.,NOT_CONNECTED,,,,,,,,,,,,,,,,,
+
+Log3 (correlated with log2):
+2>
+=INFO REPORT==== 15-Oct-2017::22:16:45 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,2>
+=INFO REPORT==== 16-Oct-2017::09:59:57 ===
+Vl3. session closed with {error,timeout}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+reach server accept state
+2>
+=INFO REPORT==== 16-Oct-2017::10:00:22 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,2> //Vl.this traffic don't appear in com.example.test1pn.TCPclient1Activity ver.199 ..hmm..
+=INFO REPORT==== 16-Oct-2017::11:16:43 ===
+Vl3. session closed with {error,timeout}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+reach server accept state
+2>
+end log3.
+****************** end tag test15, 6:00 PM Monday, October 16, 2017, 2017 //Vl. section's tags: Vl.,NOT_CONNECTED,,,,,,,,,,,,,,,,,
+
+
+****************** tag test16, 4:42 PM Tuesday, October 17, 2017 //Vl. section's tags: Vl.,onSaveInstanceState,onRestoreInstanceState,null,setSoTimeout,220Vac,,,,,,,,,,,,,,,,
+log1:com.example.test1pn.TCPclient1Activity ver.201.//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+2017-10-16 22:59:22.390V.tcpState value before initialisation in onCreate(): null
+V.from onStart()
+V.from onResume()2017-10-16 22:59:22.402
+22:59:22.418: Vl22, STATE_IN_SERVICE
+22:59:22.419: Vladi18, CALL_STATE_IDLE
+22:59:22.428: Vladi18, DATA_CONNECTED
+22:59:22.431: Vl21, DataConnectivity_UP
+22:59:22.437: NOT_CONNECTED#DataConnectivity_UP
+22:59:25.834: NOT_CONNECTED#OptionsMenuItemCONNECT
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-16 22:59:29
+22:59:29.015: CONNECTING#TCP_CONNECTEDka1d2ack ka2d2ack 
+V.from onPause()
+2017-10-16 22:59:54.268, Vl./TCPc1A., from onSaveInstanceState(bundle)	//Vl.consequence of Home button - Task manager - RAM tab - Clear memory button.
+2017-10-16 23:01:54.236, Vl./TCPc1A., from onRestoreInstanceState(bundle) //Vl.consequence of Home button - Recent apps - test1pn
+V.from onResume()2017-10-16 23:01:54.240	//Vl.onRestoreInstanceState indicate that TCPclient1Activity was effectively killed by the OS
+23:01:54.255: Vl22, STATE_IN_SERVICE
+23:01:54.256: Vladi18, CALL_STATE_IDLE
+23:01:54.256: Vladi18, DATA_CONNECTED
+23:01:54.261: Vl21, DataConnectivity_UP
+23:01:54.262: CONNECTED#DataConnectivity_UP .. not treated. //Vl.Now tcpState is recovered.. Unfortunately the SocketChannel sc was closed when TCPclient1Activity was previously killed 
+V.from onPause()												//Vl. so.., we get {error,closed} at Erlang tcpServer_1 on Raspberry
+2017-10-16 23:04:12.664, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+V.from onStart()
+V.from onResume()2017-10-16 23:30:59.024
+end log1:com.example.test1pn.TCPclient1Activity ver.201.//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+
+
+log2:com.example.test1pn.TCPclient1Activity ver.201.//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+2017-10-16 23:54:26.464V.tcpState value before initialisation in onCreate(): null
+V.from onStart()
+V.from onResume()2017-10-16 23:54:26.474
+23:54:26.525: Vl22, STATE_IN_SERVICE
+23:54:26.526: Vladi18, CALL_STATE_IDLE
+23:54:26.530: Vladi18, DATA_CONNECTED
+23:54:26.535: Vl21, DataConnectivity_UP
+23:54:26.536: NOT_CONNECTED#DataConnectivity_UP
+23:54:30.679: NOT_CONNECTED#OptionsMenuItemCONNECT
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-16 23:54:33
+23:54:33.754: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+V.from onPause()
+2017-10-16 23:54:39.653, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+V.from onStart()
+V.from onResume()2017-10-16 23:54:53.337ka2d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onPause()
+2017-10-16 23:55:04.029, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka3d18ack ka4d18ack ka5d18ack 
+00:05:47.335: Vl22, STATE_IN_SERVICE
+00:05:47.356: Vladi18, DATA_CONNECTED
+00:06:21.687: Vl22, STATE_IN_SERVICE
+00:06:21.859: Vladi18, DATA_CONNECTEDka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack ka15d18ack ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack ka21d18ack ka22d18ack ka23d18ack ka24d18ack ka25d18ack ka26d18ack ka27d18ack ka28d18ack ka29d18ack ka30d18ack ka31d18ack 
+V.from onStart()
+V.from onResume()2017-10-17 01:25:47.876ka32d18ack 
+V.from onPause()
+2017-10-17 01:26:44.508, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka33d18ack ka34d18ack 
+V.from onStart()
+V.from onResume()2017-10-17 01:34:17.946ka35d18ack 
+V.from onPause()
+2017-10-17 01:37:56.617, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka36d18ack ka37d18ack ka38d18ack ka39d18ack ka40d18ack ka41d18ack ka42d18ack ka43d18ack ka44d18ack ka45d18ack ka46d18ack ka47d18ack ka48d18ack ka49d18ack ka50d18ack ka51d18ack ka52d18ack ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack ka58d18ack ka59d18ack ka60d18ack ka61d18ack ka62d18ack ka63d18ack ka64d18ack ka65d18ack ka66d18ack ka67d18ack ka68d18ack  ka151d18ack ka152d18ack ka153d18ack ka154d18ack ka155d18ack ka156d18ack ka157d18ack ka158d18ack ka159d18ack ka160d18ack ka161d18ack ka162d18ack ka163d18ack ka164d18ack ka165d18ack ka166d18ack ka167d18ack ka168d18ack ka169d18ack ka170d18ack ka171d18ack ka172d18ack ka173d18ack 
+V.from onStart()
+V.from onResume()2017-10-17 08:36:10.535
+V.from onPause()
+2017-10-17 08:36:30.811, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+V.from onStart()
+V.from onResume()2017-10-17 08:36:32.173
+V.from onPause()
+2017-10-17 08:36:32.229, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+V.from onStart()
+V.from onResume()2017-10-17 08:36:50.577ka174d18ack 
+V.from onPause()
+2017-10-17 08:38:44.341, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+08:39:08.051: Vladi18, CALL_STATE_OFFHOOK //Vl.called IonVintila
+08:39:08.782: CONNECTED#DATA_SUSPENDED
+08:39:08.788: Vladi18, DATA_SUSPENDED
+Vl13.2017-10-17 08:39:08.786
+Vl13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException, Vl13.Throwable detail message: null
+08:39:10.000: Vl21, DataConnectivity_DOWN
+08:39:10.206: NOT_CONNECTED#DataConnectivity_DOWN .. not treated.
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+08:39:10.799: NOT_CONNECTED#SERVER_DISCONNECTED .. not treated.
+08:39:44.822: Vladi18, CALL_STATE_IDLE
+08:39:46.420: Vladi18, DATA_CONNECTED
+08:39:46.439: Vl21, DataConnectivity_UP
+08:39:46.443: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-17 08:39:49
+
+08:39:50.056: CONNECTING#TCP_CONNECTED
+
+V.from onStart()
+V.from onResume()2017-10-17 08:39:55.050
+V.from onPause()
+2017-10-17 08:40:42.557, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onStart()
+V.from onResume()2017-10-17 08:42:26.871
+V.from onPause()
+2017-10-17 08:42:38.580, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+08:42:49.107: Vladi18, CALL_STATE_OFFHOOK	//Vl.called NicuBARBAO
+08:42:49.743: CONNECTED#DATA_SUSPENDED
+08:42:49.746: Vladi18, DATA_SUSPENDED
+Vl13.2017-10-17 08:42:48.745
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out), Vl13.Throwable detail message: recvfrom failed: ETIMEDOUT (Connection timed out)
+08:42:50.293: Vl21, DataConnectivity_DOWN
+08:42:50.784: NOT_CONNECTED#DataConnectivity_DOWN .. not treated.
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+08:42:50.748: NOT_CONNECTED#SERVER_DISCONNECTED .. not treated.
+08:45:02.370: Vladi18, CALL_STATE_IDLE
+08:45:02.415: Vladi18, DATA_CONNECTED
+08:45:02.933: Vl21, DataConnectivity_UP
+08:45:03.114: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-17 08:45:06
+08:45:06.374: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onStart()
+V.from onResume()2017-10-17 08:47:11.780
+V.from onPause()
+2017-10-17 08:48:08.977, Vl./TCPc1A., from onSaveInstanceState(bundle)	//Vl.here OnStop() is missing..
+2017-10-17 16:38:06.924, Vl./TCPc1A., from onRestoreInstanceState(bundle)//Vl.about 8 hours.. At 08:58:45 the raspberrypi is up again (see log3) after 220Vac interrupted of about 20 seconds duration.. Of course after rebooting Erlang tcpServer_1 on Raspberry is NOT automatically restarted.. so was down..
+V.from onResume()2017-10-17 16:38:06.926	//Vl.here onRestoreInstanceState/onResume is consequence of Home button - Recent apps - test1pn.. Vl.we had 8 hours without KAs
+16:38:07.111: Vl22, STATE_IN_SERVICE		//Vl. and test1pn app is not aware of that.. as if setSoTimeout above has no effect..
+16:38:07.112: Vladi18, CALL_STATE_IDLE	//Vl.onRestoreInstanceState indicate that TCPclient1Activity was effectively killed by the OS
+16:38:07.113: Vladi18, DATA_CONNECTED
+16:38:07.114: Vl21, DataConnectivity_UP
+16:38:07.114: CONNECTED#DataConnectivity_UP .. not treated.
+V.from onPause()
+2017-10-17 16:38:42.174, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+V.from onStart()
+V.from onResume()2017-10-17 16:39:17.202
+end log2:com.example.test1pn.TCPclient1Activity ver.201.//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+
+log3 (related to log2):
+pi@raspberrypi:~
+$ uptime
+ 18:43:22 up  9:44,  2 users,  load average: 0.00, 0.00, 0.00
+pi@raspberrypi:~
+$ uptime -s
+2017-10-17 08:58:45
+end log3 (related to log2):
+****************** end tag test16, 4:42 PM Tuesday, October 17, 2017 //Vl. section's tags: Vl.,,onSaveInstanceState,onRestoreInstanceState,setSoTimeout,220Vac,uptime,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+
+****************** tag test17, 4:24 PM Sunday, October 22, 2017 //Vl. section's tags: Vl.,onSaveInstanceState,onRestoreInstanceState,null,setSoTimeout,,,,,,,,,,,,,,,,,
+log1:com.example.test1pn.TCPclient1Activity ver.201.(again ver.201)//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+2017-10-18 23:26:40.424V.tcpState value before initialisation in onCreate(): null
+V.from onStart()
+V.from onResume()2017-10-18 23:26:40.447
+23:26:40.473: Vl22, STATE_IN_SERVICE
+23:26:40.474: Vladi18, CALL_STATE_IDLE
+23:26:40.474: Vladi18, DATA_CONNECTED
+23:26:40.476: Vl21, DataConnectivity_UP
+23:26:40.488: NOT_CONNECTED#DataConnectivity_UP
+23:26:43.671: NOT_CONNECTED#OptionsMenuItemCONNECT
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-18 23:26:46
+23:26:46.497: CONNECTING#TCP_CONNECTEDka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onPause()
+2017-10-18 23:26:56.172, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka2d18ack ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack 
+V.from onStart()
+V.from onResume()2017-10-19 00:02:09.260
+V.from onPause()
+2017-10-19 00:02:36.505, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka13d18ack ka14d18ack ka15d18ack ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack ka21d18ack ka22d18ack ka23d18ack ka24d18ack ka25d18ack ka26d18ack ka27d18ack ka28d18ack ka29d18ack ka30d18ack ka31d18ack ka32d18ack ka33d18ack ka34d18ack ka35d18ack ka36d18ack ka37d18ack ka38d18ack ka39d18ack ka40d18ack ka41d18ack ka42d18ack ka43d18ack ka44d18ack ka45d18ack ka46d18ack ka47d18ack ka48d18ack ka49d18ack ka50d18ack ka51d18ack ka52d18ack ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack ka58d18ack ka59d18ack ka60d18ack ka61d18ack ka62d18ack 
+V.from onStart()
+V.from onResume()2017-10-19 02:32:21.890
+V.from onPause()
+2017-10-19 02:32:40.870, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+V.from onStart()
+V.from onResume()2017-10-19 02:33:49.327
+V.from onPause()
+2017-10-19 02:33:58.036, Vl./TCPc1A., from onSaveInstanceState(bundle)
+2017-10-19 11:13:43.916, Vl./TCPc1A., from onRestoreInstanceState(bundle) //Vl.onRestoreInstanceState indicate that TCPclient1Activity was effectively killed by the OS 
+V.from onResume()2017-10-19 11:13:43.918
+11:13:43.933: Vl22, STATE_IN_SERVICE
+11:13:43.933: Vladi18, CALL_STATE_IDLE
+11:13:43.935: Vladi18, DATA_CONNECTED
+11:13:43.936: Vl21, DataConnectivity_UP
+11:13:43.937: CONNECTED#DataConnectivity_UP .. not treated.
+11:13:49.894: Vladi18, CALL_STATE_RINGING
+V.from onPause()
+11:13:53.375: Vladi18, CALL_STATE_OFFHOOK
+2017-10-19 11:13:55.271, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+11:15:45.805: Vladi18, CALL_STATE_IDLE
+V.from onStart()
+V.from onResume()2017-10-19 11:15:50.438
+V.from onPause()
+2017-10-19 11:17:11.385, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+11:17:18.230: Vladi18, CALL_STATE_OFFHOOK
+11:17:45.672: Vladi18, CALL_STATE_IDLE
+V.from onStart()
+V.from onResume()2017-10-19 11:17:58.257
+V.from onPause()
+2017-10-19 11:22:17.360, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+11:32:41.068: Vladi18, CALL_STATE_RINGING
+11:32:45.317: Vladi18, CALL_STATE_OFFHOOK
+11:33:49.163: Vladi18, CALL_STATE_IDLE
+11:37:50.205: Vl22, STATE_EMERGENCY_ONLY
+11:37:50.209: Vl18, DATA_DISCONNECTED
+11:37:50.952: Vl22, STATE_IN_SERVICE
+11:37:50.955: Vladi18, DATA_CONNECTED
+11:37:51.092: Vl21, DataConnectivity_DOWN
+11:37:51.180: CONNECTED#DataConnectivity_DOWN
+Vladi23.., SocketChannel.close() (IO)Exception when CONNECTED/STATE_OUT_OF_SERVICE: +java.lang.NullPointerException
+11:37:52.418: Vl21, DataConnectivity_UP
+11:37:52.473: NOT_CONNECTED#DataConnectivity_UP
+Vl.switched to PRE_CONNECTING
+11:37:57.379: Vl22, STATE_IN_SERVICE
+11:37:57.444: Vladi18, DATA_CONNECTED
+11:38:04.124: Vl22, STATE_IN_SERVICE
+11:38:04.160: Vladi18, DATA_CONNECTED
+11:38:52.590: PRE_CONNECTING#ActiveNetworkConnectedConfirmation
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-19 11:38:56
+ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+11:38:56.507: CONNECTING#TCP_CONNECTED
+V.from onStart()
+V.from onResume()2017-10-19 11:39:27.100
+V.from onPause()
+2017-10-19 11:40:02.445, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka2d18ack 
+11:44:06.384: Vladi18, CALL_STATE_RINGING
+11:44:45.921: Vladi18, CALL_STATE_IDLEka3d18ack 
+11:45:07.981: Vladi18, CALL_STATE_RINGING
+11:45:11.776: Vladi18, CALL_STATE_OFFHOOKka4d18ack 
+11:48:09.166: Vl22, STATE_IN_SERVICE
+11:48:09.228: Vladi18, DATA_CONNECTED
+11:50:32.413: Vladi18, CALL_STATE_IDLE
+11:50:34.063: Vl22, STATE_IN_SERVICE
+11:50:34.079: Vladi18, DATA_CONNECTEDka5d18ack 
+11:51:03.379: Vladi18, CALL_STATE_OFFHOOK
+11:51:04.506: Vl22, STATE_IN_SERVICE
+11:51:04.509: Vladi18, DATA_CONNECTED
+11:51:15.232: Vl22, STATE_IN_SERVICE
+11:51:15.416: Vladi18, DATA_CONNECTED
+11:51:15.484: Vladi18, CALL_STATE_IDLE
+11:52:34.246: Vladi18, CALL_STATE_OFFHOOK
+11:52:35.353: Vl22, STATE_IN_SERVICE
+11:52:35.356: Vladi18, DATA_CONNECTED
+11:53:07.011: Vl22, STATE_IN_SERVICE
+11:53:07.160: Vladi18, DATA_CONNECTED
+11:54:01.204: Vl22, STATE_IN_SERVICE
+11:54:01.278: Vladi18, DATA_CONNECTEDka6d18ack 
+11:54:07.882: Vladi18, CALL_STATE_IDLE
+11:54:08.618: Vl22, STATE_IN_SERVICE
+11:54:08.621: Vladi18, DATA_CONNECTED
+11:56:03.061: Vl22, STATE_IN_SERVICE
+11:56:03.161: Vladi18, DATA_CONNECTED
+11:56:22.715: Vl22, STATE_IN_SERVICE
+11:56:22.815: Vladi18, DATA_CONNECTEDka7d18ack ka8d18ack 
+12:02:33.973: Vladi18, CALL_STATE_RINGINGka9d18ack 
+12:03:12.299: Vladi18, CALL_STATE_IDLEka10d18ack ka11d18ack ka12d18ack 
+12:14:03.868: Vl22, STATE_IN_SERVICE
+12:14:04.030: Vladi18, DATA_CONNECTED
+12:14:23.203: Vl22, STATE_IN_SERVICE
+12:14:23.289: Vladi18, DATA_CONNECTEDka13d18ack ka14d18ack 
+V.from onStart()
+V.from onResume()2017-10-19 12:18:26.262
+V.from onPause()
+2017-10-19 12:18:55.302, Vl./TCPc1A., from onSaveInstanceState(bundle)
+2017-10-22 15:21:56.173, Vl./TCPc1A., from onRestoreInstanceState(bundle)//Vl.onRestoreInstanceState indicate that TCPclient1Activity was effectively killed by the OS
+V.from onResume()2017-10-22 15:21:56.175
+15:21:56.188: Vl22, STATE_IN_SERVICE
+15:21:56.189: Vladi18, CALL_STATE_IDLE
+15:21:56.191: Vladi18, DATA_CONNECTED
+15:21:56.192: Vl21, DataConnectivity_UP
+15:21:56.193: CONNECTED#DataConnectivity_UP .. not treated.
+15:22:54.583: Vl22, STATE_IN_SERVICE
+15:22:54.608: Vladi18, DATA_CONNECTED
+15:23:01.457: Vl22, STATE_IN_SERVICE
+15:23:01.567: Vladi18, DATA_CONNECTED
+V.from onPause()
+2017-10-22 15:24:19.096, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+V.from onStart()
+V.from onResume()2017-10-22 15:24:44.023
+
+log2:
+ok
+2> echo_server:start(7000).
+echo_server rel.11, using gen_tcp:recv/3 & non-blocking graph
+socket_server rel.10
+reach server accept state
+ok
+3>
+=INFO REPORT==== 17-Oct-2017::19:08:08 ===
+Started TCP server. <0.36.0>
+
+=INFO REPORT==== 18-Oct-2017::23:26:47 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,6
+3,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,
+117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,16
+1,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,
+206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,3>
+=INFO REPORT==== 19-Oct-2017::10:52:13 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 19-Oct-2017::10:52:13 ===
+TCP client connected.
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+3>
+=INFO REPORT==== 19-Oct-2017::10:52:13 ===
+Vl3. session closed with {error,closed}
+reach server accept state
+3>
+=INFO REPORT==== 19-Oct-2017::11:38:59 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,3>
+=INFO REPORT==== 19-Oct-2017::13:27:38 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 19-Oct-2017::19:47:11 ===
+TCP client connected.
+
+=INFO REPORT==== 19-Oct-2017::19:47:14 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 20-Oct-2017::11:12:51 ===
+TCP client connected.
+=INFO REPORT==== 20-Oct-2017::11:12:54 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 21-Oct-2017::01:30:03 ===
+TCP client connected.
+
+=INFO REPORT==== 21-Oct-2017::01:30:06 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 21-Oct-2017::19:12:27 ===
+TCP client connected.
+
+=INFO REPORT==== 21-Oct-2017::19:12:30 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 21-Oct-2017::21:27:20 ===
+TCP client connected.
+
+=INFO REPORT==== 21-Oct-2017::21:27:30 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+end log2
+****************** end tag test17, 4:24 PM Sunday, October 22, 2017 //Vl. section's tags: Vl.,onSaveInstanceState,onRestoreInstanceState,null,setSoTimeout,,,,,,,,,,,,,,,,,
+
+****************** tag test18, 8:35 AM Wednesday, October 25, 2017 //Vl. section's tags: Vl.,,onRestoreInstanceState,null,setSoTimeout,,,,,,,,,,,,,,,,,
+log1:com.example.test1pn.TCPclient1Activity ver.203.over 3G//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+2017-10-23 22:55:52.123TCPc1A.onCreate(), tcpClient1ServiceIntent=null
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-23 22:55:52.130
+2017-10-23 22:56:00.247TCPc1Service.onCreate()
+2017-10-23 22:56:00.262TCPc1Service.onStartCommand(..)
+22:56:00.270: NOT_CONNECTED#OptionsMenuItemCONNECT
+22:56:00.289: Vl22, STATE_IN_SERVICE
+22:56:00.293: Vladi18, CALL_STATE_IDLE
+22:56:00.295: Vladi18, DATA_CONNECTED
+22:56:00.311: Vl21, DataConnectivity_UP
+22:56:00.315: CONNECTING#DataConnectivity_UP .. not treated.
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-10-23 22:56:03
+
+22:56:03.362: CONNECTING#TCP_CONNECTED
+ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onPause()
+2017-10-23 22:56:21.255, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-23 22:56:28.550
+V.from onPause()
+2017-10-23 22:56:33.523, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+22:56:53.642: Vl22, STATE_IN_SERVICE
+22:56:53.645: Vl22, STATE_IN_SERVICE
+22:56:53.689: Vladi18, DATA_CONNECTED
+22:56:53.697: Vladi18, DATA_CONNECTED
+22:57:02.700: Vl22, STATE_IN_SERVICE
+22:57:02.707: Vl22, STATE_IN_SERVICE
+22:57:02.758: Vladi18, DATA_CONNECTED
+22:57:02.761: Vladi18, DATA_CONNECTEDka2d18ack ka3d18ack ka4d18ack ka5d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-23 23:09:09.828
+V.from onPause()
+2017-10-23 23:09:23.371, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+23:10:28.227: Vl22, STATE_IN_SERVICE
+23:10:28.235: Vl22, STATE_IN_SERVICE
+23:10:28.273: Vladi18, DATA_CONNECTED
+23:10:28.276: Vladi18, DATA_CONNECTED
+23:10:34.967: Vl22, STATE_IN_SERVICE
+23:10:34.970: Vl22, STATE_IN_SERVICE
+23:10:34.996: Vladi18, DATA_CONNECTED
+23:10:34.999: Vladi18, DATA_CONNECTEDka6d18ack ka7d18ack 
+23:17:14.109: Vl22, STATE_IN_SERVICE
+23:17:14.113: Vl22, STATE_IN_SERVICEka8d18ack 
+23:17:14.182: Vladi18, DATA_CONNECTED
+23:17:14.185: Vladi18, DATA_CONNECTED
+23:17:30.050: Vl22, STATE_IN_SERVICE
+23:17:30.057: Vl22, STATE_IN_SERVICE
+23:17:30.079: Vladi18, DATA_CONNECTED
+23:17:30.104: Vladi18, DATA_CONNECTEDka9d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-23 23:21:48.832
+V.from onPause()
+2017-10-23 23:22:12.346, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka10d18ack ka11d18ack ka12d18ack ka13d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-23 23:33:44.463
+V.from onPause()
+2017-10-23 23:34:03.871, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka14d18ack ka15d18ack ka16d18ack ka17d18ack ka18d18ack ka19d18ack 
+23:50:58.709: Vl22, STATE_IN_SERVICE
+23:50:58.728: Vl22, STATE_IN_SERVICE
+23:50:58.762: Vladi18, DATA_CONNECTED
+23:50:58.765: Vladi18, DATA_CONNECTED
+23:51:06.023: Vl22, STATE_IN_SERVICE
+23:51:06.026: Vl22, STATE_IN_SERVICE
+23:51:06.075: Vladi18, DATA_CONNECTED
+23:51:06.080: Vladi18, DATA_CONNECTEDka20d18ack ka21d18ack ka22d18ack ka23d18ack ka24d18ack ka25d18ack ka26d18ack ka27d18ack ka28d18ack 
+00:17:58.897: Vl22, STATE_IN_SERVICE
+00:17:58.905: Vl22, STATE_IN_SERVICE
+00:17:58.927: Vladi18, DATA_CONNECTED
+00:17:58.949: Vladi18, DATA_CONNECTED
+00:18:05.703: Vl22, STATE_IN_SERVICE
+00:18:05.711: Vl22, STATE_IN_SERVICE
+00:18:05.728: Vladi18, DATA_CONNECTED
+00:18:05.738: Vladi18, DATA_CONNECTEDka29d18ack ka30d18ack ka31d18ack ka32d18ack ka33d18ack ka34d18ack 
+00:36:03.361: Vl22, STATE_IN_SERVICE
+00:36:03.365: Vl22, STATE_IN_SERVICE
+00:36:03.398: Vladi18, DATA_CONNECTED
+00:36:03.402: Vladi18, DATA_CONNECTED
+00:36:11.048: Vl22, STATE_IN_SERVICE
+00:36:11.051: Vl22, STATE_IN_SERVICE
+00:36:11.096: Vladi18, DATA_CONNECTED
+00:36:11.107: Vladi18, DATA_CONNECTEDka35d18ack ka36d18ack ka37d18ack ka38d18ack ka39d18ack ka40d18ack 
+00:54:03.525: Vl22, STATE_IN_SERVICE
+00:54:03.529: Vl22, STATE_IN_SERVICE
+00:54:03.572: Vladi18, DATA_CONNECTED
+00:54:03.575: Vladi18, DATA_CONNECTED
+00:54:11.023: Vl22, STATE_IN_SERVICE
+00:54:11.027: Vl22, STATE_IN_SERVICE
+00:54:11.052: Vladi18, DATA_CONNECTED
+00:54:11.055: Vladi18, DATA_CONNECTED
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 00:54:25.271
+V.from onPause()
+2017-10-24 00:56:02.805, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka41d18ack ka42d18ack ka43d18ack ka44d18ack ka45d18ack ka46d18ack ka47d18ack ka48d18ack ka49d18ack ka50d18ack ka51d18ack ka52d18ack 
+01:32:58.640: Vl22, STATE_IN_SERVICE
+01:32:58.645: Vl22, STATE_IN_SERVICE
+01:32:58.693: Vladi18, DATA_CONNECTED
+01:32:58.696: Vladi18, DATA_CONNECTED
+01:33:05.024: Vl22, STATE_IN_SERVICE
+01:33:05.027: Vl22, STATE_IN_SERVICE
+01:33:05.068: Vladi18, DATA_CONNECTED
+01:33:05.089: Vladi18, DATA_CONNECTEDka53d18ack ka54d18ack ka55d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 01:39:55.271
+01:40:20.051: Vl22, STATE_IN_SERVICE
+01:40:20.055: Vl22, STATE_IN_SERVICE
+01:40:20.144: Vladi18, DATA_CONNECTED
+01:40:20.149: Vladi18, DATA_CONNECTED
+01:40:27.861: Vl22, STATE_IN_SERVICE
+01:40:27.864: Vl22, STATE_IN_SERVICE
+01:40:27.964: Vladi18, DATA_CONNECTED
+01:40:27.973: Vladi18, DATA_CONNECTED
+V.from onPause()
+2017-10-24 01:40:58.317, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka56d18ack ka57d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 01:47:15.161
+V.from onPause()
+2017-10-24 01:47:53.449, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+01:48:09.966: Vl22, STATE_IN_SERVICE
+01:48:09.971: Vl22, STATE_IN_SERVICE
+01:48:10.001: Vladi18, DATA_CONNECTED
+01:48:10.005: Vladi18, DATA_CONNECTEDka58d18ack 
+01:48:23.786: Vl22, STATE_IN_SERVICE
+01:48:23.792: Vl22, STATE_IN_SERVICE
+01:48:23.838: Vladi18, DATA_CONNECTED
+01:48:23.858: Vladi18, DATA_CONNECTEDka59d18ack ka60d18ack 
+01:57:10.358: Vl22, STATE_IN_SERVICE
+01:57:10.364: Vl22, STATE_IN_SERVICE
+01:57:10.417: Vladi18, DATA_CONNECTED
+01:57:10.434: Vladi18, DATA_CONNECTED
+01:57:18.032: Vl22, STATE_IN_SERVICE
+01:57:18.045: Vl22, STATE_IN_SERVICE
+01:57:18.073: Vladi18, DATA_CONNECTED
+01:57:18.089: Vladi18, DATA_CONNECTEDka61d18ack ka62d18ack ka63d18ack ka64d18ack ka65d18ack ka66d18ack ka67d18ack ka68d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 02:20:39.784
+V.from onPause()
+2017-10-24 02:20:57.607, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka69d18ack ka70d18ack ka71d18ack ka72d18ack ka73d18ack ka74d18ack ka75d18ack ka76d18ack ka77d18ack 
+02:47:58.548: Vl22, STATE_IN_SERVICE
+02:47:58.571: Vl22, STATE_IN_SERVICE
+02:47:58.599: Vladi18, DATA_CONNECTED
+02:47:58.611: Vladi18, DATA_CONNECTED
+02:48:05.522: Vl22, STATE_IN_SERVICE
+02:48:05.525: Vl22, STATE_IN_SERVICE
+02:48:05.566: Vladi18, DATA_CONNECTED
+02:48:05.570: Vladi18, DATA_CONNECTEDka78d18ack 
+02:51:16.454: Vl22, STATE_IN_SERVICE
+02:51:16.458: Vl22, STATE_IN_SERVICE
+02:51:16.507: Vladi18, DATA_CONNECTED
+02:51:16.510: Vladi18, DATA_CONNECTED
+02:51:24.401: Vl22, STATE_IN_SERVICE
+02:51:24.408: Vl22, STATE_IN_SERVICE
+02:51:24.453: Vladi18, DATA_CONNECTED
+02:51:24.456: Vladi18, DATA_CONNECTEDka79d18ack ka80d18ack ka81d18ack ka82d18ack ka83d18ack ka84d18ack ka85d18ack ka86d18ack ka87d18ack ka88d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 03:20:51.446
+V.from onPause()
+2017-10-24 03:21:07.101, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka89d18ack ka90d18ack ka91d18ack ka92d18ack ka93d18ack ka94d18ack ka95d18ack ka96d18ack ka97d18ack ka98d18ack ka99d18ack 
+03:54:24.717: Vl22, STATE_IN_SERVICE
+03:54:24.737: Vl22, STATE_IN_SERVICE
+03:54:24.752: Vladi18, DATA_CONNECTED
+03:54:24.785: Vladi18, DATA_CONNECTED
+03:54:55.007: Vl22, STATE_IN_SERVICE
+03:54:55.020: Vl22, STATE_IN_SERVICE
+03:54:55.058: Vladi18, DATA_CONNECTED
+03:54:55.061: Vladi18, DATA_CONNECTEDka100d18ack ka101d18ack ka102d18ack 
+04:02:58.164: Vl22, STATE_IN_SERVICE
+04:02:58.167: Vl22, STATE_IN_SERVICE
+04:02:58.209: Vladi18, DATA_CONNECTED
+04:02:58.232: Vladi18, DATA_CONNECTED
+04:03:05.003: Vl22, STATE_IN_SERVICE
+04:03:05.006: Vl22, STATE_IN_SERVICE
+04:03:05.052: Vladi18, DATA_CONNECTED
+04:03:05.055: Vladi18, DATA_CONNECTEDka103d18ack ka104d18ack ka105d18ack ka106d18ack ka107d18ack ka108d18ack ka109d18ack ka110d18ack ka111d18ack ka112d18ack ka113d18ack ka114d18ack ka115d18ack ka116d18ack ka117d18ack ka118d18ack ka119d18ack ka120d18ack 
+04:57:30.731: Vl22, STATE_IN_SERVICE
+04:57:30.767: Vl22, STATE_IN_SERVICE
+04:57:30.792: Vladi18, DATA_CONNECTED
+04:57:30.796: Vladi18, DATA_CONNECTED
+04:57:43.007: Vl22, STATE_IN_SERVICE
+04:57:43.022: Vl22, STATE_IN_SERVICE
+04:57:43.056: Vladi18, DATA_CONNECTED
+04:57:43.120: Vladi18, DATA_CONNECTEDka121d18ack ka122d18ack ka123d18ack ka124d18ack ka125d18ack ka126d18ack ka127d18ack ka128d18ack ka129d18ack ka130d18ack ka131d18ack ka132d18ack 
+05:33:00.894: Vl22, STATE_IN_SERVICE
+05:33:00.898: Vl22, STATE_IN_SERVICE
+05:33:00.936: Vladi18, DATA_CONNECTED
+05:33:00.940: Vladi18, DATA_CONNECTED
+05:33:07.573: Vl22, STATE_IN_SERVICE
+05:33:07.582: Vl22, STATE_IN_SERVICE
+05:33:07.602: Vladi18, DATA_CONNECTED
+05:33:07.606: Vladi18, DATA_CONNECTEDka133d18ack ka134d18ack ka135d18ack ka136d18ack ka137d18ack ka138d18ack 
+05:51:35.521: Vl22, STATE_IN_SERVICE
+05:51:35.525: Vl22, STATE_IN_SERVICE
+05:51:35.566: Vladi18, DATA_CONNECTED
+05:51:35.569: Vladi18, DATA_CONNECTED
+05:51:48.396: Vl22, STATE_IN_SERVICE
+05:51:48.400: Vl22, STATE_IN_SERVICE
+05:51:48.437: Vladi18, DATA_CONNECTED
+05:51:48.469: Vladi18, DATA_CONNECTEDka139d18ack ka140d18ack ka141d18ack ka142d18ack ka143d18ack ka144d18ack ka145d18ack ka146d18ack ka147d18ack ka148d18ack ka149d18ack ka150d18ack ka151d18ack ka152d18ack ka153d18ack ka154d18ack ka155d18ack ka156d18ack ka157d18ack ka158d18ack ka159d18ack 
+06:54:42.092: Vl22, STATE_IN_SERVICE
+06:54:42.135: Vl22, STATE_IN_SERVICE
+06:54:42.139: Vladi18, DATA_CONNECTED
+06:54:42.141: Vladi18, DATA_CONNECTED
+06:54:49.010: Vl22, STATE_IN_SERVICE
+06:54:49.013: Vl22, STATE_IN_SERVICE
+06:54:49.060: Vladi18, DATA_CONNECTED
+06:54:49.064: Vladi18, DATA_CONNECTEDka160d18ack ka161d18ack ka162d18ack 
+07:03:03.369: Vl22, STATE_IN_SERVICE
+07:03:03.377: Vl22, STATE_IN_SERVICE
+07:03:03.412: Vladi18, DATA_CONNECTED
+07:03:03.415: Vladi18, DATA_CONNECTED
+07:03:10.149: Vl22, STATE_IN_SERVICE
+07:03:10.158: Vl22, STATE_IN_SERVICE
+07:03:10.191: Vladi18, DATA_CONNECTED
+07:03:10.195: Vladi18, DATA_CONNECTEDka163d18ack ka164d18ack ka165d18ack ka166d18ack ka167d18ack ka168d18ack ka169d18ack ka170d18ack ka171d18ack ka172d18ack ka173d18ack ka174d18ack ka175d18ack ka176d18ack ka177d18ack ka178d18ack ka179d18ack ka180d18ack 
+07:57:48.711: Vl22, STATE_IN_SERVICE
+07:57:48.743: Vl22, STATE_IN_SERVICE
+07:57:48.746: Vladi18, DATA_CONNECTED
+07:57:48.748: Vladi18, DATA_CONNECTED
+07:57:56.007: Vl22, STATE_IN_SERVICE
+07:57:56.010: Vl22, STATE_IN_SERVICE
+07:57:56.073: Vladi18, DATA_CONNECTED
+07:57:56.106: Vladi18, DATA_CONNECTEDka181d18ack ka182d18ack ka183d18ack ka184d18ack ka185d18ack ka186d18ack ka187d18ack ka188d18ack ka189d18ack ka190d18ack ka191d18ack ka192d18ack 
+08:33:05.444: Vl22, STATE_IN_SERVICE
+08:33:05.465: Vl22, STATE_IN_SERVICE
+08:33:05.486: Vladi18, DATA_CONNECTED
+08:33:05.516: Vladi18, DATA_CONNECTED
+08:33:11.843: Vl22, STATE_IN_SERVICE
+08:33:11.846: Vl22, STATE_IN_SERVICE
+08:33:11.885: Vladi18, DATA_CONNECTED
+08:33:11.888: Vladi18, DATA_CONNECTEDka193d18ack ka194d18ack ka195d18ack ka196d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 08:47:16.552ka197d18ack 
+V.from onPause()
+2017-10-24 08:48:00.828, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka198d18ack ka199d18ack ka200d18ack ka201d18ack ka202d18ack ka203d18ack ka204d18ack 
+09:10:13.311: Vladi18, CALL_STATE_RINGING
+09:10:13.354: Vladi18, CALL_STATE_RINGING
+09:10:34.024: Vladi18, CALL_STATE_IDLE
+09:10:34.029: Vladi18, CALL_STATE_IDLEka205d18ack ka206d18ack 
+09:15:18.098: Vladi18, CALL_STATE_OFFHOOK
+09:15:18.145: Vladi18, CALL_STATE_OFFHOOK
+09:16:53.604: Vladi18, CALL_STATE_IDLE
+09:16:53.627: Vladi18, CALL_STATE_IDLE
+09:17:20.547: Vladi18, CALL_STATE_OFFHOOK
+09:17:20.551: Vladi18, CALL_STATE_OFFHOOK
+09:18:03.546: Vladi18, CALL_STATE_IDLE
+09:18:03.550: Vladi18, CALL_STATE_IDLEka207d18ack 
+09:18:12.842: Vl22, STATE_IN_SERVICE
+09:18:12.845: Vl22, STATE_IN_SERVICE
+09:18:12.875: Vladi18, DATA_CONNECTED
+09:18:12.889: Vladi18, DATA_CONNECTED
+09:18:14.171: Vl22, STATE_IN_SERVICE
+09:18:14.174: Vl22, STATE_IN_SERVICE
+09:18:14.208: Vladi18, DATA_CONNECTED
+09:18:14.211: Vladi18, DATA_CONNECTED
+09:18:41.812: Vladi18, CALL_STATE_OFFHOOK
+09:18:41.815: Vladi18, CALL_STATE_OFFHOOK
+09:19:47.713: Vladi18, CALL_STATE_IDLE
+09:19:47.727: Vladi18, CALL_STATE_IDLEka208d18ack ka209d18ack ka210d18ack 
+09:29:50.680: Vladi18, CALL_STATE_RINGING
+09:29:50.686: Vladi18, CALL_STATE_RINGING
+09:30:01.961: Vladi18, CALL_STATE_OFFHOOK
+09:30:01.993: Vladi18, CALL_STATE_OFFHOOKka211d18ack ka212d18ack 
+09:34:57.807: Vladi18, CALL_STATE_IDLE
+09:34:57.827: Vladi18, CALL_STATE_IDLEka213d18ack ka214d18ack 
+09:41:40.075: Vladi18, CALL_STATE_RINGING
+09:41:40.097: Vladi18, CALL_STATE_RINGING
+09:41:48.814: Vladi18, CALL_STATE_OFFHOOK
+09:41:48.840: Vladi18, CALL_STATE_OFFHOOK
+09:42:11.833: Vladi18, CALL_STATE_IDLE
+09:42:11.856: Vladi18, CALL_STATE_IDLEka215d18ack 
+09:42:19.019: Vl22, STATE_IN_SERVICE
+09:42:19.035: Vl22, STATE_IN_SERVICE
+09:42:19.058: Vladi18, DATA_CONNECTED
+09:42:19.061: Vladi18, DATA_CONNECTED
+09:42:20.445: Vl22, STATE_IN_SERVICE
+09:42:20.448: Vl22, STATE_IN_SERVICE
+09:42:20.496: Vladi18, DATA_CONNECTED
+09:42:20.547: Vladi18, DATA_CONNECTEDka216d18ack 
+09:47:59.187: Vl22, STATE_IN_SERVICE
+09:47:59.190: Vl22, STATE_IN_SERVICE
+09:47:59.230: Vladi18, DATA_CONNECTED
+09:47:59.233: Vladi18, DATA_CONNECTED
+09:48:05.988: Vl22, STATE_IN_SERVICE
+09:48:05.991: Vl22, STATE_IN_SERVICE
+09:48:06.021: Vladi18, DATA_CONNECTED
+09:48:06.024: Vladi18, DATA_CONNECTEDka217d18ack ka218d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 09:52:27.363
+V.from onPause()
+2017-10-24 09:52:35.803, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka219d18ack 
+09:55:00.951: Vl22, STATE_IN_SERVICE
+09:55:00.955: Vl22, STATE_IN_SERVICE
+09:55:00.994: Vladi18, DATA_CONNECTED
+09:55:00.999: Vladi18, DATA_CONNECTED
+09:55:19.175: Vl22, STATE_IN_SERVICE
+09:55:19.178: Vl22, STATE_IN_SERVICE
+09:55:19.202: Vladi18, DATA_CONNECTED
+09:55:19.218: Vladi18, DATA_CONNECTEDka220d18ack ka221d18ack ka222d18ack ka223d18ack ka224d18ack 
+10:11:16.238: Vladi18, CALL_STATE_OFFHOOK
+10:11:16.249: Vladi18, CALL_STATE_OFFHOOK
+10:12:09.405: Vladi18, CALL_STATE_IDLE
+10:12:09.414: Vladi18, CALL_STATE_IDLEka225d18ack ka226d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 10:16:34.886
+V.from onPause()
+2017-10-24 10:16:51.351, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka227d18ack ka228d18ack ka229d18ack ka230d18ack ka231d18ack 
+10:32:43.969: Vladi18, CALL_STATE_OFFHOOK
+10:32:43.992: Vladi18, CALL_STATE_OFFHOOKka232d18ack ka233d18ack ka234d18ack ka235d18ack ka236d18ack 
+10:46:30.619: Vladi18, CALL_STATE_IDLE
+10:46:30.655: Vladi18, CALL_STATE_IDLE
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 10:46:49.200
+V.from onPause()
+2017-10-24 10:47:00.711, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka237d18ack ka238d18ack ka239d18ack ka240d18ack ka241d18ack 
+11:02:57.899: Vl22, STATE_IN_SERVICE
+11:02:57.907: Vl22, STATE_IN_SERVICE
+11:02:57.944: Vladi18, DATA_CONNECTED
+11:02:57.959: Vladi18, DATA_CONNECTED
+11:03:04.739: Vl22, STATE_IN_SERVICE
+11:03:04.746: Vl22, STATE_IN_SERVICE
+11:03:04.786: Vladi18, DATA_CONNECTED
+11:03:04.789: Vladi18, DATA_CONNECTEDka242d18ack ka243d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 11:08:46.119ka244d18ack 
+V.from onPause()
+2017-10-24 11:10:09.276, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka245d18ack ka246d18ack ka247d18ack ka248d18ack ka249d18ack ka250d18ack ka251d18ack ka252d18ack ka253d18ack ka254d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 11:40:31.631
+V.from onPause()
+2017-10-24 11:40:43.637, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka255d18ack ka256d18ack ka257d18ack ka258d18ack 
+11:52:08.154: Vl22, STATE_IN_SERVICE
+11:52:08.158: Vl22, STATE_IN_SERVICE
+11:52:08.188: Vladi18, DATA_CONNECTED
+11:52:08.197: Vladi18, DATA_CONNECTED
+11:52:22.922: Vl22, STATE_IN_SERVICE
+11:52:22.989: Vl22, STATE_IN_SERVICE
+11:52:22.993: Vladi18, DATA_CONNECTED
+11:52:22.995: Vladi18, DATA_CONNECTEDka259d18ack ka260d18ack ka261d18ack 
+12:01:08.101: Vl22, STATE_IN_SERVICE
+12:01:08.104: Vl22, STATE_IN_SERVICE
+12:01:08.137: Vladi18, DATA_CONNECTED
+12:01:08.154: Vladi18, DATA_CONNECTED
+12:01:15.895: Vl22, STATE_IN_SERVICE
+12:01:15.898: Vl22, STATE_IN_SERVICE
+12:01:15.946: Vladi18, DATA_CONNECTED
+12:01:15.969: Vladi18, DATA_CONNECTED
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 12:03:11.588
+V.from onPause()
+2017-10-24 12:03:29.019, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka262d18ack ka263d18ack ka264d18ack 
+12:12:26.404: Vl22, STATE_IN_SERVICE
+12:12:26.407: Vl22, STATE_IN_SERVICE
+12:12:26.443: Vladi18, DATA_CONNECTED
+12:12:26.481: Vladi18, DATA_CONNECTED
+12:12:33.180: Vl22, STATE_IN_SERVICE
+12:12:33.183: Vl22, STATE_IN_SERVICE
+12:12:33.226: Vladi18, DATA_CONNECTED
+12:12:33.255: Vladi18, DATA_CONNECTEDka265d18ack ka266d18ack ka267d18ack ka268d18ack ka269d18ack 
+12:28:11.496: Vl22, STATE_IN_SERVICE
+12:28:11.504: Vl22, STATE_IN_SERVICE
+12:28:11.535: Vladi18, DATA_CONNECTED
+12:28:11.538: Vladi18, DATA_CONNECTEDka270d18ack 
+12:28:18.912: Vl22, STATE_IN_SERVICE
+12:28:18.917: Vl22, STATE_IN_SERVICE
+12:28:18.970: Vladi18, DATA_CONNECTED
+12:28:18.973: Vladi18, DATA_CONNECTEDka271d18ack ka272d18ack ka273d18ack ka274d18ack ka275d18ack ka276d18ack ka277d18ack ka278d18ack 
+12:55:13.523: Vl22, STATE_IN_SERVICE
+12:55:13.527: Vl22, STATE_IN_SERVICE
+12:55:13.568: Vladi18, DATA_CONNECTED
+12:55:13.589: Vladi18, DATA_CONNECTED
+12:55:19.943: Vl22, STATE_IN_SERVICE
+12:55:20.008: Vl22, STATE_IN_SERVICE
+12:55:20.011: Vladi18, DATA_CONNECTED
+12:55:20.014: Vladi18, DATA_CONNECTEDka279d18ack ka280d18ack ka281d18ack ka282d18ack ka283d18ack ka284d18ack ka285d18ack ka286d18ack ka287d18ack 
+13:22:16.548: Vl22, STATE_IN_SERVICE
+13:22:16.553: Vl22, STATE_IN_SERVICE
+13:22:16.591: Vladi18, DATA_CONNECTED
+13:22:16.595: Vladi18, DATA_CONNECTED
+13:22:23.896: Vl22, STATE_IN_SERVICE
+13:22:23.904: Vl22, STATE_IN_SERVICE
+13:22:23.947: Vladi18, DATA_CONNECTED
+13:22:23.951: Vladi18, DATA_CONNECTEDka288d18ack ka289d18ack ka290d18ack ka291d18ack ka292d18ack ka293d18ack ka294d18ack 
+13:42:29.679: Vl22, STATE_IN_SERVICE
+13:42:29.682: Vl22, STATE_IN_SERVICE
+13:42:29.718: Vladi18, DATA_CONNECTED
+13:42:29.726: Vladi18, DATA_CONNECTED
+13:42:36.472: Vl22, STATE_IN_SERVICE
+13:42:36.476: Vl22, STATE_IN_SERVICE
+13:42:36.497: Vladi18, DATA_CONNECTED
+13:42:36.506: Vladi18, DATA_CONNECTEDka295d18ack ka296d18ack ka297d18ack ka298d18ack ka299d18ack 
+13:57:53.203: Vl22, STATE_IN_SERVICE
+13:57:53.222: Vl22, STATE_IN_SERVICE
+13:57:53.240: Vladi18, DATA_CONNECTED
+13:57:53.247: Vladi18, DATA_CONNECTED
+13:58:03.908: Vl22, STATE_IN_SERVICE
+13:58:03.911: Vl22, STATE_IN_SERVICE
+13:58:03.954: Vladi18, DATA_CONNECTED
+13:58:03.968: Vladi18, DATA_CONNECTED
+13:58:21.773: Vl22, STATE_IN_SERVICE
+13:58:21.779: Vl22, STATE_IN_SERVICE
+13:58:21.801: Vladi18, DATA_CONNECTED
+13:58:21.806: Vladi18, DATA_CONNECTED
+13:58:29.901: Vl22, STATE_IN_SERVICE
+13:58:29.905: Vl22, STATE_IN_SERVICE
+13:58:29.956: Vladi18, DATA_CONNECTED
+13:58:29.974: Vladi18, DATA_CONNECTEDka300d18ack ka301d18ack 
+14:04:47.897: Vl22, STATE_IN_SERVICE
+14:04:47.905: Vl22, STATE_IN_SERVICE
+14:04:47.943: Vladi18, DATA_CONNECTED
+14:04:47.964: Vladi18, DATA_CONNECTEDka302d18ack 
+14:04:54.972: Vl22, STATE_IN_SERVICE
+14:04:54.975: Vl22, STATE_IN_SERVICE
+14:04:55.014: Vladi18, DATA_CONNECTED
+14:04:55.054: Vladi18, DATA_CONNECTEDka303d18ack ka304d18ack ka305d18ack ka306d18ack ka307d18ack ka308d18ack 
+14:24:54.759: Vladi18, CALL_STATE_OFFHOOK
+14:24:54.781: Vladi18, CALL_STATE_OFFHOOK
+14:25:24.029: Vladi18, CALL_STATE_IDLE
+14:25:24.045: Vladi18, CALL_STATE_IDLEka309d18ack ka310d18ack ka311d18ack ka312d18ack ka313d18ack ka314d18ack ka315d18ack ka316d18ack ka317d18ack ka318d18ack ka319d18ack 
+14:58:49.516: Vladi18, CALL_STATE_RINGING
+14:58:49.526: Vladi18, CALL_STATE_RINGINGka320d18ack 
+14:59:35.418: Vladi18, CALL_STATE_IDLE
+14:59:35.422: Vladi18, CALL_STATE_IDLE
+15:01:27.591: Vl22, STATE_IN_SERVICE
+15:01:27.599: Vl22, STATE_IN_SERVICE
+15:01:27.642: Vladi18, DATA_CONNECTED
+15:01:27.645: Vladi18, DATA_CONNECTED
+15:01:34.964: Vl22, STATE_IN_SERVICE
+15:01:34.968: Vl22, STATE_IN_SERVICE
+15:01:35.004: Vladi18, DATA_CONNECTED
+15:01:35.011: Vladi18, DATA_CONNECTEDka321d18ack 
+15:04:10.954: Vladi18, CALL_STATE_OFFHOOK
+15:04:10.992: Vladi18, CALL_STATE_OFFHOOK
+15:04:53.770: Vladi18, CALL_STATE_IDLE
+15:04:53.774: Vladi18, CALL_STATE_IDLE
+15:05:01.318: Vl22, STATE_IN_SERVICE
+15:05:01.326: Vl22, STATE_IN_SERVICE
+15:05:01.365: Vladi18, DATA_CONNECTED
+15:05:01.377: Vladi18, DATA_CONNECTEDka322d18ack 
+15:05:15.641: Vl22, STATE_IN_SERVICE
+15:05:15.644: Vl22, STATE_IN_SERVICE
+15:05:15.674: Vladi18, DATA_CONNECTED
+15:05:15.678: Vladi18, DATA_CONNECTEDka323d18ack ka324d18ack 
+15:12:33.354: Vl22, STATE_IN_SERVICE
+15:12:33.371: Vl22, STATE_IN_SERVICE
+15:12:33.396: Vladi18, DATA_CONNECTED
+15:12:33.404: Vladi18, DATA_CONNECTED
+15:12:40.103: Vl22, STATE_IN_SERVICE
+15:12:40.106: Vl22, STATE_IN_SERVICE
+15:12:40.130: Vladi18, DATA_CONNECTED
+15:12:40.155: Vladi18, DATA_CONNECTEDka325d18ack ka326d18ack ka327d18ack ka328d18ack ka329d18ack 
+15:28:29.681: Vl22, STATE_IN_SERVICE
+15:28:29.689: Vl22, STATE_IN_SERVICE
+15:28:29.721: Vladi18, DATA_CONNECTED
+15:28:29.743: Vladi18, DATA_CONNECTED
+15:28:48.206: Vl22, STATE_IN_SERVICE
+15:28:48.217: Vl22, STATE_IN_SERVICE
+15:28:48.231: Vladi18, DATA_CONNECTED
+15:28:48.248: Vladi18, DATA_CONNECTED
+15:28:48.942: Vl22, STATE_IN_SERVICE
+15:28:48.959: Vl22, STATE_IN_SERVICE
+15:28:48.989: Vladi18, DATA_CONNECTED
+15:28:48.992: Vladi18, DATA_CONNECTED
+15:28:58.899: Vl22, STATE_IN_SERVICE
+15:28:58.918: Vl22, STATE_IN_SERVICE
+15:28:58.952: Vladi18, DATA_CONNECTED
+15:28:58.967: Vladi18, DATA_CONNECTEDka330d18ack ka331d18ack ka332d18ack 
+15:36:45.815: Vl22, STATE_IN_SERVICE
+15:36:45.837: Vl22, STATE_IN_SERVICE
+15:36:45.851: Vladi18, DATA_CONNECTED
+15:36:45.886: Vladi18, DATA_CONNECTED
+15:36:52.622: Vl22, STATE_IN_SERVICE
+15:36:52.629: Vl22, STATE_IN_SERVICE
+15:36:52.659: Vladi18, DATA_CONNECTED
+15:36:52.663: Vladi18, DATA_CONNECTED
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 15:37:38.972
+V.from onPause()
+2017-10-24 15:37:42.793, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 15:37:44.340ka333d18ack 
+V.from onPause()
+2017-10-24 15:38:40.274, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka334d18ack ka335d18ack ka336d18ack ka337d18ack ka338d18ack 
+15:55:33.536: Vl22, STATE_IN_SERVICE
+15:55:33.545: Vl22, STATE_IN_SERVICE
+15:55:33.568: Vladi18, DATA_CONNECTED
+15:55:33.572: Vladi18, DATA_CONNECTED
+15:55:50.375: Vl22, STATE_IN_SERVICE
+15:55:50.380: Vl22, STATE_IN_SERVICE
+15:55:50.424: Vladi18, DATA_CONNECTED
+15:55:50.431: Vladi18, DATA_CONNECTEDka339d18ack ka340d18ack ka341d18ack ka342d18ack ka343d18ack ka344d18ack 
+16:13:34.159: Vl22, STATE_IN_SERVICE
+16:13:34.162: Vl22, STATE_IN_SERVICE
+16:13:34.189: Vladi18, DATA_CONNECTED
+16:13:34.192: Vladi18, DATA_CONNECTED
+16:13:48.923: Vl22, STATE_IN_SERVICE
+16:13:48.926: Vl22, STATE_IN_SERVICE
+16:13:48.949: Vladi18, DATA_CONNECTED
+16:13:48.952: Vladi18, DATA_CONNECTEDka345d18ack ka346d18ack 
+16:17:58.959: Vl22, STATE_IN_SERVICE
+16:17:58.962: Vl22, STATE_IN_SERVICE
+16:17:59.002: Vladi18, DATA_CONNECTED
+16:17:59.006: Vladi18, DATA_CONNECTED
+16:18:05.445: Vl22, STATE_IN_SERVICE
+16:18:05.448: Vl22, STATE_IN_SERVICE
+16:18:05.477: Vladi18, DATA_CONNECTED
+16:18:05.480: Vladi18, DATA_CONNECTEDka347d18ack ka348d18ack ka349d18ack ka350d18ack ka351d18ack ka352d18ack ka353d18ack ka354d18ack ka355d18ack ka356d18ack ka357d18ack ka358d18ack ka359d18ack 
+16:58:37.812: Vl22, STATE_IN_SERVICE
+16:58:37.834: Vl22, STATE_IN_SERVICE
+16:58:37.848: Vladi18, DATA_CONNECTED
+16:58:37.851: Vladi18, DATA_CONNECTED
+16:58:48.614: Vl22, STATE_IN_SERVICE
+16:58:48.618: Vl22, STATE_IN_SERVICE
+16:58:48.642: Vladi18, DATA_CONNECTED
+16:58:48.645: Vladi18, DATA_CONNECTEDka360d18ack ka361d18ack ka362d18ack ka363d18ack ka364d18ack ka365d18ack ka366d18ack ka367d18ack ka368d18ack ka369d18ack ka370d18ack ka371d18ack ka372d18ack ka373d18ack ka374d18ack ka375d18ack 
+17:48:01.308: Vl22, STATE_IN_SERVICE
+17:48:01.314: Vl22, STATE_IN_SERVICE
+17:48:01.355: Vladi18, DATA_CONNECTED
+17:48:01.358: Vladi18, DATA_CONNECTED
+17:48:08.123: Vl22, STATE_IN_SERVICE
+17:48:08.126: Vl22, STATE_IN_SERVICE
+17:48:08.148: Vladi18, DATA_CONNECTED
+17:48:08.157: Vladi18, DATA_CONNECTEDka376d18ack ka377d18ack ka378d18ack ka379d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 17:57:33.861
+V.from onPause()
+2017-10-24 17:58:09.301, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka380d18ack 
+18:01:43.544: Vl22, STATE_IN_SERVICE
+18:01:43.547: Vl22, STATE_IN_SERVICE
+18:01:43.583: Vladi18, DATA_CONNECTED
+18:01:43.586: Vladi18, DATA_CONNECTED
+18:01:53.327: Vl22, STATE_IN_SERVICE
+18:01:53.331: Vl22, STATE_IN_SERVICE
+18:01:53.353: Vladi18, DATA_CONNECTED
+18:01:53.356: Vladi18, DATA_CONNECTEDka381d18ack ka382d18ack ka383d18ack ka384d18ack ka385d18ack ka386d18ack ka387d18ack ka388d18ack ka389d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 18:27:44.008
+V.from onPause()
+2017-10-24 18:29:52.084, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka390d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 18:33:23.823
+V.from onPause()
+2017-10-24 18:33:28.165, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka391d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 18:35:36.359
+V.from onPause()
+2017-10-24 18:36:05.920, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka392d18ack 
+18:37:46.750: Vl22, STATE_IN_SERVICE
+18:37:46.753: Vl22, STATE_IN_SERVICE
+18:37:46.792: Vladi18, DATA_CONNECTED
+18:37:46.824: Vladi18, DATA_CONNECTED
+18:37:55.543: Vl22, STATE_IN_SERVICE
+18:37:55.546: Vl22, STATE_IN_SERVICE
+18:37:55.586: Vladi18, DATA_CONNECTED
+18:37:55.616: Vladi18, DATA_CONNECTEDka393d18ack ka394d18ack ka395d18ack ka396d18ack ka397d18ack ka398d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 18:57:19.769ka399d18ack 
+V.from onPause()
+2017-10-24 18:58:18.519, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+18:58:35.210: Vl22, STATE_IN_SERVICE
+18:58:35.213: Vl22, STATE_IN_SERVICE
+18:58:35.241: Vladi18, DATA_CONNECTED
+18:58:35.245: Vladi18, DATA_CONNECTED
+18:58:41.939: Vl22, STATE_IN_SERVICE
+18:58:41.942: Vl22, STATE_IN_SERVICE
+18:58:41.975: Vladi18, DATA_CONNECTED
+18:58:41.978: Vladi18, DATA_CONNECTEDka400d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 19:02:47.964ka401d18ack 
+Vladi19. sending: [B@411046f8, [86, 108, 97, 100, 105, 84, 101, 115, 116, 49, 10]ka402d18ack VladiTest1
+
+
+V.from onPause()
+2017-10-24 19:07:28.230, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+19:07:57.494: Vl22, STATE_IN_SERVICE
+19:07:57.498: Vl22, STATE_IN_SERVICE
+19:07:57.552: Vladi18, DATA_CONNECTED
+19:07:57.570: Vladi18, DATA_CONNECTED
+19:08:20.824: Vl22, STATE_IN_SERVICE
+19:08:20.835: Vl22, STATE_IN_SERVICE
+19:08:20.877: Vladi18, DATA_CONNECTED
+19:08:20.898: Vladi18, DATA_CONNECTEDka403d18ack ka404d18ack 
+19:13:49.266: Vl22, STATE_IN_SERVICE
+19:13:49.273: Vl22, STATE_IN_SERVICE
+19:13:49.299: Vladi18, DATA_CONNECTED
+19:13:49.329: Vladi18, DATA_CONNECTED
+19:13:57.877: Vl22, STATE_IN_SERVICE
+19:13:57.884: Vl22, STATE_IN_SERVICE
+19:13:57.914: Vladi18, DATA_CONNECTED
+19:13:57.917: Vladi18, DATA_CONNECTEDka405d18ack ka406d18ack ka407d18ack ka408d18ack ka409d18ack ka410d18ack ka411d18ack ka412d18ack ka413d18ack ka414d18ack ka415d18ack ka416d18ack ka417d18ack ka418d18ack ka419d18ack 
+19:58:52.363: Vl22, STATE_IN_SERVICE
+19:58:52.367: Vl22, STATE_IN_SERVICE
+19:58:52.400: Vladi18, DATA_CONNECTED
+19:58:52.447: Vladi18, DATA_CONNECTED
+19:58:59.685: Vl22, STATE_IN_SERVICE
+19:58:59.692: Vl22, STATE_IN_SERVICE
+19:58:59.715: Vladi18, DATA_CONNECTED
+19:58:59.718: Vladi18, DATA_CONNECTED
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 19:59:12.056
+V.from onPause()
+2017-10-24 19:59:30.314, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+19:59:46.849: Vl22, STATE_IN_SERVICE
+19:59:46.851: Vl22, STATE_IN_SERVICE
+19:59:46.887: Vladi18, DATA_CONNECTED
+19:59:46.896: Vladi18, DATA_CONNECTED
+19:59:53.653: Vl22, STATE_IN_SERVICE
+19:59:53.656: Vl22, STATE_IN_SERVICE
+19:59:53.679: Vladi18, DATA_CONNECTED
+19:59:53.682: Vladi18, DATA_CONNECTEDka420d18ack ka421d18ack ka422d18ack ka423d18ack 
+20:12:00.105: Vladi18, CALL_STATE_RINGING
+20:12:00.111: Vladi18, CALL_STATE_RINGING
+20:12:07.899: Vladi18, CALL_STATE_OFFHOOK
+20:12:07.906: Vladi18, CALL_STATE_OFFHOOKka424d18ack ka425d18ack ka426d18ack 
+20:20:27.748: Vladi18, CALL_STATE_IDLE
+20:20:27.754: Vladi18, CALL_STATE_IDLE
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-24 20:21:03.495
+V.from onPause()
+2017-10-24 20:21:14.121, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka427d18ack ka428d18ack ka429d18ack ka430d18ack 
+20:31:52.228: Vladi18, CALL_STATE_RINGING
+20:31:52.237: Vladi18, CALL_STATE_RINGING
+20:31:59.988: Vladi18, CALL_STATE_OFFHOOK
+20:32:00.029: Vladi18, CALL_STATE_OFFHOOK
+20:33:19.726: Vladi18, CALL_STATE_IDLE
+20:33:19.758: Vladi18, CALL_STATE_IDLE
+20:33:26.923: Vl22, STATE_IN_SERVICE
+20:33:26.926: Vl22, STATE_IN_SERVICE
+20:33:26.982: Vladi18, DATA_CONNECTED
+20:33:26.985: Vladi18, DATA_CONNECTED
+20:33:36.682: Vl22, STATE_IN_SERVICE
+20:33:36.686: Vl22, STATE_IN_SERVICE
+20:33:36.725: Vladi18, DATA_CONNECTED
+20:33:36.745: Vladi18, DATA_CONNECTEDka431d18ack ka432d18ack ka433d18ack ka434d18ack ka435d18ack ka436d18ack ka437d18ack 
+20:52:57.417: Vl22, STATE_IN_SERVICE
+20:52:57.426: Vl22, STATE_IN_SERVICE
+20:52:57.455: Vladi18, DATA_CONNECTED
+20:52:57.458: Vladi18, DATA_CONNECTED
+20:53:10.720: Vl22, STATE_IN_SERVICE
+20:53:10.723: Vl22, STATE_IN_SERVICE
+20:53:10.751: Vladi18, DATA_CONNECTED
+20:53:10.754: Vladi18, DATA_CONNECTEDka438d18ack ka439d18ack ka440d18ack 
+21:01:57.477: Vl22, STATE_IN_SERVICE
+21:01:57.485: Vl22, STATE_IN_SERVICE
+21:01:57.517: Vladi18, DATA_CONNECTED
+21:01:57.554: Vladi18, DATA_CONNECTED
+21:02:04.766: Vl22, STATE_IN_SERVICE
+21:02:04.773: Vl22, STATE_IN_SERVICE
+21:02:04.794: Vladi18, DATA_CONNECTED
+21:02:04.808: Vladi18, DATA_CONNECTED
+21:02:59.524: Vl22, STATE_IN_SERVICE
+21:02:59.528: Vl22, STATE_IN_SERVICE
+21:02:59.552: Vladi18, DATA_CONNECTED
+21:02:59.556: Vladi18, DATA_CONNECTED
+21:03:06.159: Vl22, STATE_IN_SERVICE
+21:03:06.163: Vl22, STATE_IN_SERVICE
+21:03:06.208: Vladi18, DATA_CONNECTED
+21:03:06.212: Vladi18, DATA_CONNECTEDka441d18ack ka442d18ack ka443d18ack ka444d18ack ka445d18ack ka446d18ack 
+21:38:02.168: Vl22, STATE_IN_SERVICE
+21:38:02.173: Vl22, STATE_IN_SERVICE
+21:38:02.211: Vladi18, DATA_CONNECTED
+21:38:02.215: Vladi18, DATA_CONNECTED
+21:38:12.982: Vl22, STATE_IN_SERVICE
+21:38:12.986: Vl22, STATE_IN_SERVICE
+21:38:13.073: Vladi18, DATA_CONNECTED
+21:38:13.076: Vladi18, DATA_CONNECTED
+21:56:03.545: Vl22, STATE_IN_SERVICE
+21:56:03.569: Vl22, STATE_IN_SERVICE
+21:56:03.601: Vladi18, DATA_CONNECTED
+21:56:03.605: Vladi18, DATA_CONNECTED
+21:56:11.912: Vl22, STATE_IN_SERVICE
+21:56:11.915: Vl22, STATE_IN_SERVICE
+21:56:11.965: Vladi18, DATA_CONNECTED
+21:56:11.969: Vladi18, DATA_CONNECTED
+22:05:05.895: Vl22, STATE_IN_SERVICE
+22:05:05.903: Vl22, STATE_IN_SERVICE
+22:05:05.921: Vladi18, DATA_CONNECTED
+22:05:05.924: Vladi18, DATA_CONNECTED
+22:05:14.770: Vl22, STATE_IN_SERVICE
+22:05:14.773: Vl22, STATE_IN_SERVICE
+22:05:14.795: Vladi18, DATA_CONNECTED
+22:05:14.807: Vladi18, DATA_CONNECTED
+22:33:05.447: Vl22, STATE_IN_SERVICE
+22:33:05.454: Vl22, STATE_IN_SERVICE
+22:33:05.504: Vladi18, DATA_CONNECTED
+22:33:05.507: Vladi18, DATA_CONNECTED
+22:33:11.890: Vl22, STATE_IN_SERVICE
+22:33:11.894: Vl22, STATE_IN_SERVICE
+22:33:11.916: Vladi18, DATA_CONNECTED
+22:33:11.930: Vladi18, DATA_CONNECTED
+22:59:12.850: Vl22, STATE_IN_SERVICE
+22:59:12.853: Vl22, STATE_IN_SERVICE
+22:59:12.889: Vladi18, DATA_CONNECTED
+22:59:12.892: Vladi18, DATA_CONNECTED
+22:59:21.895: Vl22, STATE_IN_SERVICE
+22:59:21.904: Vl22, STATE_IN_SERVICE
+22:59:21.944: Vladi18, DATA_CONNECTED
+22:59:21.986: Vladi18, DATA_CONNECTED
+00:02:18.316: Vl22, STATE_IN_SERVICE
+00:02:18.323: Vl22, STATE_IN_SERVICE
+00:02:18.355: Vladi18, DATA_CONNECTED
+00:02:18.389: Vladi18, DATA_CONNECTED
+00:02:38.909: Vl22, STATE_IN_SERVICE
+00:02:38.912: Vl22, STATE_IN_SERVICE
+00:02:38.957: Vladi18, DATA_CONNECTED
+00:02:38.961: Vladi18, DATA_CONNECTED
+00:03:07.934: Vl22, STATE_IN_SERVICE
+00:03:07.937: Vl22, STATE_IN_SERVICE
+00:03:07.979: Vladi18, DATA_CONNECTED
+00:03:07.983: Vladi18, DATA_CONNECTED
+00:03:14.696: Vl22, STATE_IN_SERVICE
+00:03:14.700: Vl22, STATE_IN_SERVICE
+00:03:14.739: Vladi18, DATA_CONNECTED
+00:03:14.743: Vladi18, DATA_CONNECTED
+00:29:21.681: Vl22, STATE_IN_SERVICE
+00:29:21.685: Vl22, STATE_IN_SERVICE
+00:29:21.733: Vladi18, DATA_CONNECTED
+00:29:21.758: Vladi18, DATA_CONNECTED
+00:29:27.932: Vl22, STATE_IN_SERVICE
+00:29:27.936: Vl22, STATE_IN_SERVICE
+00:29:27.972: Vladi18, DATA_CONNECTED
+00:29:28.021: Vladi18, DATA_CONNECTED
+00:56:24.543: Vl22, STATE_IN_SERVICE
+00:56:24.547: Vl22, STATE_IN_SERVICE
+00:56:24.578: Vladi18, DATA_CONNECTED
+00:56:24.581: Vladi18, DATA_CONNECTED
+00:56:32.015: Vl22, STATE_IN_SERVICE
+00:56:32.019: Vl22, STATE_IN_SERVICE
+00:56:32.098: Vladi18, DATA_CONNECTED
+00:56:32.105: Vladi18, DATA_CONNECTED
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 00:58:53.114
+V.from onPause()
+2017-10-25 01:01:04.163, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 01:03:18.051
+V.from onPause()
+2017-10-25 01:04:10.692, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 01:04:13.138
+01:04:27.032: Vl22, STATE_IN_SERVICE
+01:04:27.035: Vl22, STATE_IN_SERVICE
+01:04:27.205: Vladi18, DATA_CONNECTED
+01:04:27.212: Vladi18, DATA_CONNECTED
+01:04:44.014: Vl22, STATE_IN_SERVICE
+01:04:44.022: Vl22, STATE_IN_SERVICE
+01:04:44.026: Vladi18, DATA_CONNECTED
+01:04:44.034: Vladi18, DATA_CONNECTED
+V.from onPause()
+2017-10-25 01:05:05.299, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 01:10:39.036
+V.from onPause()
+2017-10-25 01:10:53.843, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 01:10:55.900
+V.from onPause()
+2017-10-25 01:11:32.090, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 01:12:11.546
+V.from onPause()
+2017-10-25 01:13:08.590, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 01:22:29.725
+01:22:49.781: Vl22, STATE_IN_SERVICE
+01:22:49.785: Vl22, STATE_IN_SERVICE
+01:22:49.788: Vladi18, DATA_CONNECTED
+01:22:49.815: Vladi18, DATA_CONNECTED
+01:22:57.265: Vl22, STATE_IN_SERVICE
+01:22:57.273: Vl22, STATE_IN_SERVICE
+01:22:57.317: Vladi18, DATA_CONNECTED
+01:22:57.325: Vladi18, DATA_CONNECTED
+V.from onPause()
+2017-10-25 01:23:45.699, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+Incomplete read 1, nBytes=0; buf: pos=0, limit=32, remaining=32
+01:27:52.696: Vl22, STATE_IN_SERVICE
+01:27:52.699: Vl22, STATE_IN_SERVICE
+01:27:52.745: Vladi18, DATA_CONNECTED
+01:27:52.749: Vladi18, DATA_CONNECTED
+01:28:21.904: Vl22, STATE_IN_SERVICE
+01:28:21.908: Vl22, STATE_IN_SERVICE
+01:28:21.949: Vladi18, DATA_CONNECTED
+01:28:21.958: Vladi18, DATA_CONNECTED
+01:41:29.007: Vl22, STATE_IN_SERVICE
+01:41:29.011: Vl22, STATE_IN_SERVICE
+01:41:29.045: Vladi18, DATA_CONNECTED
+01:41:29.060: Vladi18, DATA_CONNECTED
+01:41:40.861: Vl22, STATE_IN_SERVICE
+01:41:40.864: Vl22, STATE_IN_SERVICE
+01:41:40.933: Vladi18, DATA_CONNECTED
+01:41:40.936: Vladi18, DATA_CONNECTED
+01:59:29.813: Vl22, STATE_IN_SERVICE
+01:59:29.817: Vl22, STATE_IN_SERVICE
+01:59:29.859: Vladi18, DATA_CONNECTED
+01:59:29.863: Vladi18, DATA_CONNECTED
+01:59:37.933: Vl22, STATE_IN_SERVICE
+01:59:37.936: Vl22, STATE_IN_SERVICE
+01:59:37.968: Vladi18, DATA_CONNECTED
+01:59:37.984: Vladi18, DATA_CONNECTED
+02:18:03.391: Vl22, STATE_IN_SERVICE
+02:18:03.399: Vl22, STATE_IN_SERVICE
+02:18:03.427: Vladi18, DATA_CONNECTED
+02:18:03.431: Vladi18, DATA_CONNECTED
+02:18:10.165: Vl22, STATE_IN_SERVICE
+02:18:10.172: Vl22, STATE_IN_SERVICE
+02:18:10.211: Vladi18, DATA_CONNECTED
+02:18:10.214: Vladi18, DATA_CONNECTED
+03:02:35.346: Vl22, STATE_IN_SERVICE
+03:02:35.349: Vl22, STATE_IN_SERVICE
+03:02:35.385: Vladi18, DATA_CONNECTED
+03:02:35.388: Vladi18, DATA_CONNECTED
+03:02:41.924: Vl22, STATE_IN_SERVICE
+03:02:41.932: Vl22, STATE_IN_SERVICE
+03:02:41.954: Vladi18, DATA_CONNECTED
+03:02:41.975: Vladi18, DATA_CONNECTED
+03:48:05.703: Vl22, STATE_IN_SERVICE
+03:48:05.706: Vl22, STATE_IN_SERVICE
+03:48:05.745: Vladi18, DATA_CONNECTED
+03:48:05.779: Vladi18, DATA_CONNECTED
+03:48:22.301: Vl22, STATE_IN_SERVICE
+03:48:22.305: Vl22, STATE_IN_SERVICE
+03:48:22.346: Vladi18, DATA_CONNECTED
+03:48:22.377: Vladi18, DATA_CONNECTED
+03:56:40.436: Vl22, STATE_IN_SERVICE
+03:56:40.443: Vl22, STATE_IN_SERVICE
+03:56:40.469: Vladi18, DATA_CONNECTED
+03:56:40.491: Vladi18, DATA_CONNECTED
+03:56:47.822: Vl22, STATE_IN_SERVICE
+03:56:47.825: Vl22, STATE_IN_SERVICE
+03:56:47.864: Vladi18, DATA_CONNECTED
+03:56:47.874: Vladi18, DATA_CONNECTED
+04:59:48.194: Vl22, STATE_IN_SERVICE
+04:59:48.197: Vl22, STATE_IN_SERVICE
+04:59:48.224: Vladi18, DATA_CONNECTED
+04:59:48.227: Vladi18, DATA_CONNECTED
+05:00:02.919: Vl22, STATE_IN_SERVICE
+05:00:02.924: Vl22, STATE_IN_SERVICE
+05:00:02.970: Vladi18, DATA_CONNECTED
+05:00:02.982: Vladi18, DATA_CONNECTED
+05:18:08.072: Vl22, STATE_IN_SERVICE
+05:18:08.080: Vl22, STATE_IN_SERVICE
+05:18:08.104: Vladi18, DATA_CONNECTED
+05:18:08.107: Vladi18, DATA_CONNECTED
+05:18:14.885: Vl22, STATE_IN_SERVICE
+05:18:14.893: Vl22, STATE_IN_SERVICE
+05:18:14.914: Vladi18, DATA_CONNECTED
+05:18:14.926: Vladi18, DATA_CONNECTED
+05:44:52.538: Vl22, STATE_IN_SERVICE
+05:44:52.545: Vl22, STATE_IN_SERVICE
+05:44:52.581: Vladi18, DATA_CONNECTED
+05:44:52.584: Vladi18, DATA_CONNECTED
+05:45:08.893: Vl22, STATE_IN_SERVICE
+05:45:08.897: Vl22, STATE_IN_SERVICE
+05:45:09.091: Vladi18, DATA_CONNECTED
+05:45:09.094: Vladi18, DATA_CONNECTED
+06:02:54.522: Vl22, STATE_IN_SERVICE
+06:02:54.527: Vl22, STATE_IN_SERVICE
+06:02:54.566: Vladi18, DATA_CONNECTED
+06:02:54.570: Vladi18, DATA_CONNECTED
+06:03:04.379: Vl22, STATE_IN_SERVICE
+06:03:04.382: Vl22, STATE_IN_SERVICE
+06:03:04.422: Vladi18, DATA_CONNECTED
+06:03:04.425: Vladi18, DATA_CONNECTED
+06:48:11.245: Vl22, STATE_IN_SERVICE
+06:48:11.253: Vl22, STATE_IN_SERVICE
+06:48:11.302: Vladi18, DATA_CONNECTED
+06:48:11.306: Vladi18, DATA_CONNECTED
+06:48:17.676: Vl22, STATE_IN_SERVICE
+06:48:17.682: Vl22, STATE_IN_SERVICE
+06:48:17.721: Vladi18, DATA_CONNECTED
+06:48:17.725: Vladi18, DATA_CONNECTED
+06:57:00.725: Vl22, STATE_IN_SERVICE
+06:57:00.729: Vl22, STATE_IN_SERVICE
+06:57:00.767: Vladi18, DATA_CONNECTED
+06:57:00.801: Vladi18, DATA_CONNECTED
+06:57:07.903: Vl22, STATE_IN_SERVICE
+06:57:07.907: Vl22, STATE_IN_SERVICE
+06:57:07.953: Vladi18, DATA_CONNECTED
+06:57:07.961: Vladi18, DATA_CONNECTED
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 07:27:10.242
+V.from onPause()
+2017-10-25 07:27:29.762, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+07:51:07.896: Vl22, STATE_IN_SERVICE
+07:51:07.899: Vl22, STATE_IN_SERVICE
+07:51:07.950: Vladi18, DATA_CONNECTED
+07:51:07.953: Vladi18, DATA_CONNECTED
+07:51:29.904: Vl22, STATE_IN_SERVICE
+07:51:29.908: Vl22, STATE_IN_SERVICE
+07:51:29.966: Vladi18, DATA_CONNECTED
+07:51:29.989: Vladi18, DATA_CONNECTED
+08:00:11.926: Vl22, STATE_IN_SERVICE
+08:00:11.930: Vl22, STATE_IN_SERVICE
+08:00:11.957: Vladi18, DATA_CONNECTED
+08:00:11.960: Vladi18, DATA_CONNECTED
+08:00:28.892: Vl22, STATE_IN_SERVICE
+08:00:28.896: Vl22, STATE_IN_SERVICE
+08:00:28.967: Vladi18, DATA_CONNECTED
+08:00:28.988: Vladi18, DATA_CONNECTED
+08:03:08.648: Vl22, STATE_IN_SERVICE
+08:03:08.653: Vl22, STATE_IN_SERVICE
+08:03:08.681: Vladi18, DATA_CONNECTED
+08:03:08.685: Vladi18, DATA_CONNECTED
+08:03:15.140: Vl22, STATE_IN_SERVICE
+08:03:15.144: Vl22, STATE_IN_SERVICE
+08:03:15.168: Vladi18, DATA_CONNECTED
+08:03:15.177: Vladi18, DATA_CONNECTED
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 08:25:12.954
+V.from onPause()
+2017-10-25 08:25:47.117, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-25 08:26:09.749
+end log1
+
+log2
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 23-Oct-2017::22:56:04 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,365,366,367,368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,419,420,421,422,423,424,425,426,427,428,429,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,3>
+=INFO REPORT==== 24-Oct-2017::21:22:54 ===
+Vl3. session closed with {error,timeout} //Vl.TCPserver_1 didn't got 447ack although it sent ka447..(we have comma after 446.. just see above..)
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 24-Oct-2017::21:22:54 === 
+TCP client connected.//Vl.connected in the same second when we closed (remark1)
+=INFO REPORT==== 24-Oct-2017::21:22:57 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 24-Oct-2017::21:22:57 ===
+TCP client connected.//Vl.remark1
+=INFO REPORT==== 24-Oct-2017::21:23:00 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 24-Oct-2017::21:23:00 ===
+TCP client connected.//Vl.remark1
+=INFO REPORT==== 24-Oct-2017::21:23:03 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 24-Oct-2017::21:23:03 ===
+TCP client connected.//Vl.remark1
+=INFO REPORT==== 24-Oct-2017::21:23:06 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+end log2
+****************** end tag test18, 8:35 AM Wednesday, October 25, 2017 //Vl. section's tags: Vl.,,onRestoreInstanceState,null,setSoTimeout,,,,,,,,,,,,,,,,,
+
+
+****************** tag test19, 10:59 PM Tuesday, October 31, 2017 //Vl. section's tags: Vl.,totalSeqAcks,nBytes,,,,,,,,,,,,,,,,,,,
+log1:com.example.test1pn.TCPclient1Activity ver.205.over GPRS//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+2017-10-31 20:26:53.171TCPc1A.onCreate(), tcpClient1ServiceIntent=Intent { cmp=xxxx }
+V.startTimeStamp: 2017-10-30 21:48:24.289
+V.totalSeqAcks: 445
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-31 20:26:53.199
+V.from onPause()
+2017-10-31 20:27:18.576, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka11d18ack ka12d18ack ka13d18ack ka14d18ack 
+Incomplete read 1, nBytes=0; buf: pos=0, limit=32, remaining=32 //Vl.np++ nBytes
+Incomplete read 2, nBytes=0; buf: pos=0, limit=32, remaining=32
+Incomplete read 3, nBytes=0; buf: pos=0, limit=32, remaining=32
+Incomplete read 4, nBytes=0; buf: pos=0, limit=32, remaining=32
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-31 21:07:20.895
+V.from onPause()
+2017-10-31 21:09:07.177, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-31 21:09:41.578
+V.from onPause()
+2017-10-31 21:11:49.058, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-31 21:18:55.376
+V.from onPause()
+2017-10-31 21:20:06.657, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-10-31 21:21:29.012
+end log1:com.example.test1pn.TCPclient1Activity ver.205.over GPRS//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+=INFO REPORT==== 31-Oct-2017::10:21:10 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,2>
+=INFO REPORT==== 31-Oct-2017::19:59:27 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+reach server accept state
+2>
+=INFO REPORT==== 31-Oct-2017::19:59:27 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,2>
+=INFO REPORT==== 31-Oct-2017::20:42:13 ===
+Vl3. session closed with {error,timeout} //Vl.correlated with Incomplete read np++ nBytes above at the TCPclient1Activity
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+reach server accept state
+2>
+=INFO REPORT==== 31-Oct-2017::21:41:53 ===
+TCP client connected.
+1,2>
+=INFO REPORT==== 31-Oct-2017::21:44:53 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+reach server accept state
+2>
+=INFO REPORT==== 31-Oct-2017::21:44:53 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,2>
+=INFO REPORT==== 31-Oct-2017::22:52:04 ===
+Vl3. session closed with {error,timeout}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+reach server accept state
+2>
+=INFO REPORT==== 31-Oct-2017::22:54:21 ===
+TCP client connected.
+1,2,3,42>
+****************** end tag test19, 10:59 PM Tuesday, October 31, 2017 //Vl. section's tags: Vl.,totalSeqAcks,nBytes,,,,,,,,,,,,,,,,,,,
+
+
+****************** tag test20, 10:12 PM Saturday, November 04, 2017 //Vl. section's tags: Vl.,totalSeqAcks,nBytes,,,,,,,,,,,,,,,,,,,
+log log1:com.example.test1pn.TCPclient1Activity ver.206.over GPRS//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+//Vl.Unfortunately I closed TCPclient1Activity after {error,timeout} 4-Nov-2017::18:45:44 ===
+log log2:
+295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,365,366,367,368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,419,420,421,422,423,424,425,426,427,428,429,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,466,2>
+=INFO REPORT==== 4-Nov-2017::16:59:49 ===
+Vl3. session closed with {error,timeout}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+reach server accept state
+2>
+=INFO REPORT==== 4-Nov-2017::17:05:16 ===
+TCP client connected.
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,2>
+=INFO REPORT==== 4-Nov-2017::18:45:44 ===
+Vl3. session closed with {error,timeout}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.284>}
+reach server accept state
+2>
+log log3:
+pi@raspberrypi:~/projects1/tcpServer_1
+$ netstat -aptun
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:7000            0.0.0.0:*               LISTEN      23508/beam.smp
+tcp        0     52 10.1.53.27:22           81.181.207.253:2598     ESTABLISHED -
+tcp        0      0 10.1.53.27:7000         213.233.84.185:7284     ESTABLISHED -//Vl.3 ESTABLISHED tcp7000 sessions..
+tcp        0      0 10.1.53.27:7000         213.233.84.185:7107     ESTABLISHED -
+tcp        0      0 10.1.53.27:7000         213.233.84.185:14712    ESTABLISHED -
+tcp        0      0 10.1.53.27:22           18.220.139.182:55263    ESTABLISHED -
+tcp6       0      0 :::22                   :::*                    LISTEN      -
+udp        0      0 0.0.0.0:33244           0.0.0.0:*                           -
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           -
+udp        0      0 10.1.53.27:123          0.0.0.0:*                           -
+udp        0      0 127.0.0.1:123           0.0.0.0:*                           -
+udp        0      0 0.0.0.0:123             0.0.0.0:*                           -
+udp        0      0 0.0.0.0:5353            0.0.0.0:*                           -
+udp6       0      0 :::47433                :::*                                -
+udp6       0      0 fe80::5c5a:5d72:939:123 :::*                                -
+udp6       0      0 ::1:123                 :::*                                -
+udp6       0      0 :::123                  :::*                                -
+udp6       0      0 :::5353                 :::*                                -
+pi@raspberrypi:~/projects1/tcpServer_1
+$
+log log4:
+root@android:/ # /system/xbin/netstat -atunep
+/system/xbin/netstat -atunep
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 127.0.0.1:55555         0.0.0.0:*               LISTEN      124/mediaserver
+tcp        0      0 127.0.0.1:55556         0.0.0.0:*               LISTEN      124/mediaserver
+tcp        0      0 127.0.0.1:5037          0.0.0.0:*               LISTEN      153/adbd
+tcp        0      0 127.0.0.1:9997          0.0.0.0:*               LISTEN      115/connfwexe
+tcp        0      0 127.0.0.1:20817         0.0.0.0:*               LISTEN      615/system_server
+tcp        0      0 127.0.0.1:32500         0.0.0.0:*               LISTEN      116/npsmobex
+tcp        0      0 127.0.0.1:8888          0.0.0.0:*               LISTEN      110/rild
+tcp        0      0 127.0.0.1:60859         127.0.0.1:8888          ESTABLISHED 111/sec-ril
+tcp        0      0 127.0.0.1:8888          127.0.0.1:60859         ESTABLISHED 110/rild
+tcp        0      0 ::ffff:10.194.17.56:52019 ::ffff:108.177.15.188:5228 ESTABLISHED 29394/com.google.pr //Vl.29394-29442/com.google.process.gapps
+tcp        0      0 ::ffff:10.194.17.56:33413 ::ffff:89.120.135.155:7000 ESTABLISHED 22605/com.example.t	//Vl.hmm,7000,IPv6??
+udp        0      0 127.0.0.1:43000         0.0.0.0:*                           19719/com.android.MtpApplication
+udp        0      0 127.0.0.1:43001         0.0.0.0:*                           19719/com.android.MtpApplication
+udp        0      0 127.0.0.1:43002         0.0.0.0:*                           19719/com.android.MtpApplication
+root@android:/ #
+****************** end tag test20, 10:12 PM Saturday, November 04, 2017 //Vl. section's tags: Vl.,totalSeqAcks,nBytes,,,,,,,,,,,,,,,,,,,
+
+****************** tag test21, 12:10 PM Friday, November 10, 2017//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+log log1:com.example.test1pn.TCPclient1Activity ver.208.over GPRS, but using tcpServer_1/echo_server rel.13 with timer:apply_after(..delayedKA..)..(so, without timer:sleep/1 in loop //Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+log log1:
+2017-11-09 19:00:51.816TCPc1A.onCreate(), tcpClient1ServiceIntent=Intent { cmp=xxxx }
+V.startTimeStamp: 2017-11-09 18:59:54.960
+V.totalSeqAcks: 1
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-09 19:00:51.831
+V.from onPause()
+2017-11-09 19:00:58.128, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka2d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-09 19:03:38.879
+V.from onPause()
+2017-11-09 19:03:55.993, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-09 19:22:17.985
+V.from onPause()
+2017-11-09 19:22:25.748, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka9d18ack 
+19:25:38.985: Vladi18, CALL_STATE_OFFHOOK
+19:25:38.993: Vladi18, CALL_STATE_OFFHOOK
+19:25:39.094: NOT_CONNECTED#DATA_SUSPENDED .. not treated.
+19:25:39.100: Vladi18, DATA_SUSPENDED
+19:25:39.104: CONNECTED#DATA_SUSPENDED
+19:25:39.191: Vladi18, DATA_SUSPENDED
+Vl13.2017-11-09 19:25:39.185
+Vl13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException, Vl13.Throwable detail message: null
+19:25:41.056: Vl21, DataConnectivity_DOWN
+19:25:41.072: NOT_CONNECTED#DataConnectivity_DOWN .. not treated.
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+19:25:41.186: NOT_CONNECTED#SERVER_DISCONNECTED .. not treated.
+2017-11-09 19:25:41.186TCPc1Service leaved RecvThread.
+19:25:47.603: Vladi18, CALL_STATE_IDLE
+19:25:47.618: Vladi18, CALL_STATE_IDLE
+19:25:47.668: Vladi18, DATA_CONNECTED
+19:25:47.696: Vladi18, DATA_CONNECTED
+19:25:48.599: Vl21, DataConnectivity_UP
+19:25:48.603: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-11-09 19:25:52
+
+19:25:52.356: CONNECTING#TCP_CONNECTED
+
+V.The sc SocketChannel is in blocking mode.ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-09 19:26:34.276
+19:28:11.642: Vladi18, CALL_STATE_RINGING	//Vl.Gabi called me..
+19:28:11.647: Vladi18, CALL_STATE_RINGING
+19:28:11.923: NOT_CONNECTED#DATA_SUSPENDED .. not treated.
+19:28:11.952: Vladi18, DATA_SUSPENDED
+19:28:11.968: CONNECTED#DATA_SUSPENDED
+19:28:11.998: Vladi18, DATA_SUSPENDED
+Vl13.2017-11-09 19:28:11.886
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out), Vl13.Throwable detail message: recvfrom failed: ETIMEDOUT (Connection timed out)
+V.from onPause()
+19:28:12.969: Vl21, DataConnectivity_DOWN
+19:28:12.977: NOT_CONNECTED#DataConnectivity_DOWN .. not treated.
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+19:28:13.997: NOT_CONNECTED#SERVER_DISCONNECTED .. not treated.
+2017-11-09 19:28:13.997TCPc1Service leaved RecvThread.
+19:28:17.994: Vladi18, CALL_STATE_OFFHOOK
+19:28:18.071: Vladi18, CALL_STATE_OFFHOOK
+2017-11-09 19:28:18.521, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+19:29:05.035: Vladi18, CALL_STATE_IDLE
+19:29:05.042: Vladi18, CALL_STATE_IDLE
+19:29:05.091: Vladi18, DATA_CONNECTED
+19:29:05.112: Vladi18, DATA_CONNECTED
+19:29:05.967: Vl21, DataConnectivity_UP
+19:29:05.971: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-11-09 19:29:09	//Vl.correlation_1 (with tcpServer_1 log2)
+
+19:29:09.784: CONNECTING#TCP_CONNECTED
+
+V.The sc SocketChannel is in blocking mode.
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-09 19:29:10.042ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onPause()
+2017-11-09 19:29:18.844, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-09 19:29:41.204ka2d18ack 
+19:33:21.229: Vladi18, CALL_STATE_RINGING
+19:33:21.232: Vladi18, CALL_STATE_RINGING
+19:33:21.501: NOT_CONNECTED#DATA_SUSPENDED .. not treated.
+19:33:21.506: Vladi18, DATA_SUSPENDED
+19:33:21.564: CONNECTED#DATA_SUSPENDED
+19:33:21.567: Vladi18, DATA_SUSPENDED
+Vl13.2017-11-09 19:33:21.468
+Vl13.., we got an Exception in RecvThread: java.net.SocketException: recvfrom failed: ETIMEDOUT (Connection timed out), Vl13.Throwable detail message: recvfrom failed: ETIMEDOUT (Connection timed out)
+V.from onPause()
+19:33:22.333: Vl21, DataConnectivity_DOWN
+19:33:22.554: NOT_CONNECTED#DataConnectivity_DOWN .. not treated.
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+19:33:23.479: NOT_CONNECTED#SERVER_DISCONNECTED .. not treated.
+2017-11-09 19:33:23.480TCPc1Service leaved RecvThread.
+19:33:26.226: Vladi18, CALL_STATE_OFFHOOK
+19:33:26.268: Vladi18, CALL_STATE_OFFHOOK
+2017-11-09 19:33:26.764, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()
+19:35:19.502: Vladi18, CALL_STATE_IDLE
+19:35:19.505: Vladi18, CALL_STATE_IDLE
+19:35:19.559: Vladi18, DATA_CONNECTED
+19:35:19.562: Vladi18, DATA_CONNECTED
+19:35:20.461: Vl21, DataConnectivity_UP
+19:35:20.465: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-11-09 19:35:24
+
+19:35:24.439: CONNECTING#TCP_CONNECTED
+
+V.The sc SocketChannel is in blocking mode.
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-09 19:35:24.509ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.
+V.from onPause()
+2017-11-09 19:36:09.838, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka2d18ack ka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-09 20:08:21.774
+V.from onPause()
+2017-11-09 20:08:39.254, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka12d18ack ka13d18ack ka14d18ack ka15d18ack ka16d18ack 
+20:21:40.777: Vladi18, CALL_STATE_RINGING
+20:21:40.781: Vladi18, CALL_STATE_RINGING
+20:21:40.836: NOT_CONNECTED#DATA_SUSPENDED .. not treated.
+20:21:40.901: Vladi18, DATA_SUSPENDED
+20:21:40.905: CONNECTED#DATA_SUSPENDED
+20:21:40.965: Vladi18, DATA_SUSPENDED
+Vl13.2017-11-09 20:21:40.964
+Vl13.., we got an Exception in RecvThread: java.nio.channels.AsynchronousCloseException, Vl13.Throwable detail message: null
+20:21:41.543: Vl21, DataConnectivity_DOWN
+20:21:41.569: NOT_CONNECTED#DataConnectivity_DOWN .. not treated.
+Vl13.SocketChannel isConnected() returns false.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+20:21:42.965: NOT_CONNECTED#SERVER_DISCONNECTED .. not treated.
+2017-11-09 20:21:42.972TCPc1Service leaved RecvThread.
+20:21:53.385: Vladi18, CALL_STATE_OFFHOOK
+20:21:53.429: Vladi18, CALL_STATE_OFFHOOK
+20:22:34.503: Vladi18, CALL_STATE_IDLE
+20:22:34.512: Vladi18, CALL_STATE_IDLE
+20:22:34.559: Vladi18, DATA_CONNECTED
+20:22:34.563: Vladi18, DATA_CONNECTED
+20:22:35.488: Vl21, DataConnectivity_UP
+20:22:35.492: NOT_CONNECTED#DataConnectivity_UP
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....
+20:22:43.608: Vl22, STATE_IN_SERVICE
+20:22:43.637: Vl22, STATE_IN_SERVICE
+20:22:43.647: Vladi18, DATA_CONNECTED
+20:22:43.691: Vladi18, DATA_CONNECTEDdone
+2017-11-09 20:22:47
+
+20:22:47.644: CONNECTING#TCP_CONNECTED
+
+V.The sc SocketChannel is in blocking mode.ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.ka2d18ack 
+20:26:02.602: Vl22, STATE_IN_SERVICE
+20:26:02.605: Vl22, STATE_IN_SERVICE
+20:26:02.638: Vladi18, DATA_CONNECTED
+20:26:02.660: Vladi18, DATA_CONNECTEDka3d18ack ka4d18ack ka5d18ack ka6d18ack ka7d18ack ka8d18ack ka9d18ack ka10d18ack ka11d18ack ka12d18ack ka13d18ack ka14d18ack ka15d18ack ka16d18ack ka17d18ack ka18d18ack ka19d18ack ka20d18ack ka21d18ack ka22d18ack ka23d18ack ka24d18ack ka25d18ack ka26d18ack ka27d18ack ka28d18ack ka29d18ack ka30d18ack ka31d18ack ka32d18ack ka33d18ack ka34d18ack ka35d18ack ka36d18ack ka37d18ack ka38d18ack ka39d18ack ka40d18ack ka41d18ack ka42d18ack ka43d18ack ka44d18ack ka45d18ack ka46d18ack ka47d18ack ka48d18ack ka49d18ack ka50d18ack ka51d18ack ka52d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-09 22:59:40.420
+V.from onPause()
+2017-11-09 22:59:54.232, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka53d18ack ka54d18ack ka55d18ack ka56d18ack ka57d18ack ka58d18ack ka59d18ack ka60d18ack ka61d18ack ka62d18ack ka63d18ack ka64d18ack ka65d18ack ka66d18ack ka67d18ack ka68d18ack ka69d18ack ka70d18ack ka71d18ack ka72d18ack ka73d18ack ka74d18ack ka75d18ack ka76d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-10 00:13:21.554ka77d18ack 
+V.from onPause()
+2017-11-10 00:14:40.064, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka78d18ack ka79d18ack ka80d18ack ka81d18ack ka82d18ack ka83d18ack ka84d18ack ka85d18ack ka86d18ack ka87d18ack ka88d18ack ka89d18ack ka90d18ack ka91d18ack ka218d18ack ka219d18ack ka220d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-10 07:32:21.823
+V.from onPause()
+2017-11-10 07:32:33.911, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka221d18ack ka222d18ack ka223d18ack ka224d18ack ka225d18ack ka226d18ack ka227d18ack ka228d18ack ka229d18ack ka230d18ack ka231d18ack ka232d18ack ka233d18ack ka234d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-10 08:15:35.635
+V.from onPause()
+2017-11-10 08:16:01.167, Vl./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka235d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-10 08:20:18.428ka236d18ack
+
+
+log log2: tcpServer_1 view.. ,Vl.,,,,,,,,,,,,,,,
+2> echo_server:start(7000).
+echo_server rel.13, using gen_tcp:recv/3 & non-blocking graph
+socket_server rel.10
+reach server accept state
+ok
+3>
+=INFO REPORT==== 9-Nov-2017::18:59:25 ===
+Started TCP server. <0.36.0>
+
+=INFO REPORT==== 9-Nov-2017::18:59:57 ===
+TCP client connected. Traffic socket: #Port<0.305>
+132333>
+3435363738393>
+=INFO REPORT==== 9-Nov-2017::19:25:54 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 9-Nov-2017::19:25:55 ===
+TCP client connected. Traffic socket: #Port<0.311>
+13> ,	//Vl.correlation_1 (with TCPclient1Activity log1), comma "," was printed at the end of the phone call, indicate that all call duration tcpServer_1 saw TCPclient1Activity as connected.., so RST flag (as result of sc.close() in TCPclient1Service) didn't reached tcpServer_1
+=INFO REPORT==== 9-Nov-2017::19:29:12 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 9-Nov-2017::19:29:12 ===
+TCP client connected. Traffic socket: #Port<0.312>
+1323> ,
+=INFO REPORT==== 9-Nov-2017::19:35:26 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 9-Nov-2017::19:35:26 ===
+TCP client connected. Traffic socket: #Port<0.313>
+132333435363738393103113123133143153163>
+=INFO REPORT==== 9-Nov-2017::20:22:47 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 9-Nov-2017::20:22:49 ===
+TCP client connected. Traffic socket: #Port<0.314>
+13233343536373839310311312313314315316317318319320321322323324325326327328329330331332333334335336337338339340341342343344345346347348349350351352353354355356357358359360343285328632873288328932903291329232933294329532963297329832993> ,
+=INFO REPORT==== 10-Nov-2017::11:37:05 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 10-Nov-2017::11:37:05 ===
+TCP client connected. Traffic socket: #Port<0.315>
+,
+=INFO REPORT==== 10-Nov-2017::11:37:08 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 10-Nov-2017::11:37:08 ===
+TCP client connected. Traffic socket: #Port<0.316>
+13>
+=INFO REPORT==== 10-Nov-2017::11:38:24 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 10-Nov-2017::11:38:25 ===
+TCP client connected. Traffic socket: #Port<0.317>
+132333435363738393103113123>
+****************** end tag test21, 12:10 PM Friday, November 10, 2017//Vl. section's tags: Vl.,traffic,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+
+
+****************** tag test22, 3:29 PM Saturday, November 11, 2017//Vl. section's tags: Vl.,traffic,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+
+log log1:com.example.test1pn.TCPclient1Activity ver.208.over GPRS, but using tcpServer_1/echo_server rel.13 with timer:apply_after(..delayedKA..)..(so, without timer:sleep/1 in loop (socket_server is rel.10)//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,
+//V. we don't have the TCPclient1Activity view since the phone suddenly powered off (battery flat).. I bought an other battery for my Samsung ICS PMP phone..
+3>
+=INFO REPORT==== 10-Nov-2017::11:38:25 ===
+TCP client connected. Traffic socket: #Port<0.317>
+1323334353637383931031131231331431531631731831932032132232332432532632732832933033133233333433533633733833934034134234334434534634734834935035135235335435535635735835936036136236
+3364365366367368369370371372373374375376377378379380381382383384385386387388389390391392393394395396397398399310031013102310331043105310631073108310931103111311231133114311531163
+1173118311931203121312231233124312531263127312831293130313131323133313431353136313731383139314031413142314331443145314631473148314931503151315231533154315531563157315831593160316
+1316231633164316531663167316831693170317131723173317431753176317731783179318031813182318331843185318631873188318931903191319231933194319531963197319831993200320132023203320432053
+20632073208320932103211321232133214321532163217321832193220322132223223322432253226322732283229323032313232323332343235323632373238323932403241324232433244324532463> ,
+=INFO REPORT==== 11-Nov-2017::00:14:04 ===
+Vl3. session closed with {error,timeout}	//Vl.here Gabi unplugged the home router from 220Vac socket..
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 11-Nov-2017::08:53:39 ===
+TCP client connected. Traffic socket: #Port<0.318> //Vl.TCPclient1Activity reconnected  after 9 hours..when I received a phone call..so, it seems sc.socket().setSoTimeout in TCPclient1Service.java didn't worked.. Fuck.. we don't have the TCPclient1Activity view
+132333435363738393103113123133143153163173183193203213223233243> ,
+=INFO REPORT==== 11-Nov-2017::10:07:08 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 11-Nov-2017::10:07:08 ===
+TCP client connected. Traffic socket: #Port<0.319>
+13>
+=INFO REPORT==== 11-Nov-2017::10:08:23 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 11-Nov-2017::10:08:24 ===
+TCP client connected. Traffic socket: #Port<0.320>
+13> ,
+=INFO REPORT==== 11-Nov-2017::10:12:50 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 11-Nov-2017::10:12:53 ===
+TCP client connected. Traffic socket: #Port<0.321>
+13> ,
+=INFO REPORT==== 11-Nov-2017::10:16:21 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 11-Nov-2017::10:16:22 ===
+TCP client connected. Traffic socket: #Port<0.322>
+132333435363738393103>
+=INFO REPORT==== 11-Nov-2017::10:46:22 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 11-Nov-2017::10:46:22 ===
+TCP client connected. Traffic socket: #Port<0.323>
+13>
+=INFO REPORT==== 11-Nov-2017::10:48:05 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+=INFO REPORT==== 11-Nov-2017::10:48:05 ===
+TCP client connected. Traffic socket: #Port<0.324>
+13> ,
+=INFO REPORT==== 11-Nov-2017::10:52:34 ===
+Vl3. session closed with {error,closed}
+socket_server:handle_cast/2, State = {server_state,7000,{echo_server,loop},any,#Port<0.299>}
+reach server accept state
+3>
+****************** end tag test22, 3:29 PM Saturday, November 11, 2017//Vl. section's tags: Vl.,traffic,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+
+
+****************** tag test23, 8:37 AM Monday, November 13, 2017, 2017//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+log log1:com.example.test1pn.TCPclient1Activity ver.208.over GPRS, but using tcpServer_1/echo_server rel.13 with timer:apply_after(..delayedKA..)..(so, without timer:sleep/1 in loop (socket_server is rel.10)//Vl. section's tags: Vl.,read,CONNECTING,,,,,,,,,,,,,,,,,,
+2017-11-12 22:12:05.375TCPc1A.onCreate(), tcpClient1ServiceIntent=Intent { cmp=xxxx }
+V.startTimeStamp: 2017-11-12 02:12:48.719
+V.totalSeqAcks: 392
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-12 22:12:05.400
+V.from onPause()
+2017-11-12 22:12:19.604, V./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka173d18ack ka174d18ack ka175d18ack ka176d18ack ka177d18ack ka178d18ack ka179d18ack ka180d18ack ka181d18ack ka182d18ack ka183d18ack ka184d18ack ka185d18ack 
+Incomplete read 1, nBytes=-1; buf: pos=0, limit=32, remaining=32	//Vl.here I stopped the tcpServer_1. (with q().in Erlang shell).
+Vl13.2017-11-12 22:51:43.109
+Vl13.., we got an Exception in RecvThread: java.lang.Exception: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream, Vl13.Throwable detail message: Vladi16 _Exception, read -1 Bytes => the channel has reached end-of-stream
+Vl13.SocketChannel isConnected() returns true.., sent 2s delayed EVENT.SERVER_DISCONNECTED
+22:56:30.266: CONNECTED#SERVER_DISCONNECTED
+2017-11-12 22:56:30.349TCPc1Service leaved RecvThread.
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ECONNREFUSED (Connection refused)
+Vladi5. receive thread not launched
+22:56:33.218: CONNECTING#TCP_CONNECTING_FAILED	//Vl. we only have 3 seconds between connecting attempts..
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....
+Vladi4. got sc.connect(isa) IOException, java.net.ConnectException: failed to connect to /89.120.135.155 (port 7000): connect failed: ECONNREFUSED (Connection refused)
+Vladi5. receive thread not launched
+22:56:36.080: CONNECTING#TCP_CONNECTING_FAILED
+ActiveNetworkType is: 0, mobile
+Connecting to: 89.120.135.155.7000 ....done
+2017-11-12 23:03:15
+23:03:15.548: CONNECTING#TCP_CONNECTED
+V.The sc SocketChannel is in blocking mode.ka1d2ack 
+Vl27. setSoTimeout to 270 seconds.ka2d18ack ka3d18ack ka4d18ack ka5d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-12 23:18:25.220ka6d18ack 
+V.from onPause()
+2017-11-12 23:20:04.603, V./TCPc1A., from onSaveInstanceState(bundle)
+V.from OnStop()ka7d18ack ka8d18ack 
+TCPc1A.onStart()
+TCPc1A.onResume()2017-11-12 23:26:07.863
+
+****************** end tag test23, 8:37 AM Monday, November 13, 2017, 2017//Vl. section's tags: Vl.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
